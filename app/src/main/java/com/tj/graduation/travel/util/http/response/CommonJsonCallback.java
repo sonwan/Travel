@@ -3,6 +3,7 @@ package com.tj.graduation.travel.util.http.response;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.tj.graduation.travel.util.http.exception.OkHttpException;
@@ -77,6 +78,7 @@ public class CommonJsonCallback implements Callback {
         }
         try {
             JSONObject result = new JSONObject(responseObj.toString());
+            Log.e("result", result + "");
             if (result.has(RESULT_CODE)) {
                 //从JSON对象中取出我们的响应码，如果为0，则是正确的响应
                 if (result.getInt(RESULT_CODE) == RESULT_CODE_VALUE) {

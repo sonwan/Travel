@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onSuccess(Object responseObj) {
 
                         SpotListModel model = (SpotListModel) responseObj;
-                        Toast.makeText(MainActivity.this, model.getMsg(), Toast.LENGTH_LONG).show();
+                        tv.setText(model.getData().getList().get(0).getDescInfo());
 
                     }
 
