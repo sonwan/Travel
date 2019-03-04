@@ -26,9 +26,12 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        hideTitle();
         setContentView(R.layout.main_activity);
         initView();
         initFirstFragment();
+
+        showProgressDialog();
 
     }
 

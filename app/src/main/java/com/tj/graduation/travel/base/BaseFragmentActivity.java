@@ -7,6 +7,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.tj.graduation.travel.R;
+import com.tj.graduation.travel.dialog.DataLoadingProgressDialog;
 import com.tj.graduation.travel.util.CustomTitleHelper;
 
 /**
@@ -16,6 +17,7 @@ import com.tj.graduation.travel.util.CustomTitleHelper;
 public class BaseFragmentActivity extends FragmentActivity {
 
     private CustomTitleHelper customTitleHelper;
+    private DataLoadingProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -23,6 +25,10 @@ public class BaseFragmentActivity extends FragmentActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
+
+    public void hideTitle() {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+    }
 
     /**
      * 在setContentView之前调用
@@ -33,6 +39,9 @@ public class BaseFragmentActivity extends FragmentActivity {
 
     }
 
+    /**
+     * 自定义标题，在setContentView之后调用
+     */
     public void setCustomTitle() {
 
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title_layout);
@@ -40,8 +49,36 @@ public class BaseFragmentActivity extends FragmentActivity {
 
     }
 
+    /**
+     * 设置标题
+     *
+     * @param title
+     */
     public void setTItle(String title) {
         customTitleHelper.setTitle(title);
+    }
+
+    /**
+     * 显示网略加载弹框
+     */
+    public void showProgressDialog() {
+
+        if (progressDialog == null) {
+            progressDialog = new DataLoadingProgressDialog(this);
+        }
+        if (!progressDialog.isShowing()) {
+            progressDialog.show();
+        }
+
+    }
+
+    /**
+     * 隐藏加载框
+     */
+    public void dismissProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
     }
 
 
