@@ -70,7 +70,7 @@ public class BaseActivity extends Activity {
      * 隐藏加载框
      */
     public void dismissProgressDialog() {
-        if (progressDialog != null) {
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
     }

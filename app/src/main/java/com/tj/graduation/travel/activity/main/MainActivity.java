@@ -31,8 +31,6 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
         initView();
         initFirstFragment();
 
-        showProgressDialog();
-
     }
 
     private void initView() {

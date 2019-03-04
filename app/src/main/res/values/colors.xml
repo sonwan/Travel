@@ -6,4 +6,6 @@
 
     <color name="title_layout">#1196EE</color>
     <color name="white">#ffffff</color>
+    <color name="spot_list_name">#3b3b3b</color>
+    <color name="spot_list_money">#fa6b29</color>
 </resources>
