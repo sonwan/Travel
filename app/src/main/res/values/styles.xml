@@ -8,4 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="CustomTitleTheme" parent="android:Theme">
+        <item name="android:windowTitleSize">45dp</item>
+        <item name="android:windowTitleBackgroundStyle">@style/CustomTitleBackgroundStyle</item>
+        <item name="android:windowContentOverlay">@android:color/transparent</item>
+
+    </style>
+
+    <style name="CustomTitleBackgroundStyle">
+        <item name="android:background">@color/title_layout</item>
+    </style>
+
 </resources>
