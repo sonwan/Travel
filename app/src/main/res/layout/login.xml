@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
     <RelativeLayout
         android:id="@+id/login_view"
-        android:layout_width="400dp"
-        android:layout_height="800dp"
-        android:layout_centerInParent="true"
-        >
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
 
         <ImageView
+            android:id="@+id/logo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/logo"
-            android:src="@mipmap/login"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             android:layout_alignWithParentIfMissing="false"
-            android:background="#ffffff" />
-
-        <EditText
-            android:layout_width="400dp"
-            android:layout_height="60dp"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/login_edit_pwd"
-            android:drawableLeft="@android:drawable/ic_lock_idle_lock"
-            android:hint="请输入您的密码"
-            android:layout_below="@+id/login_edit_account"
+            android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginTop="10dp"
-            android:layout_alignParentStart="true" />
-
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="#ffffff"
+            android:src="@mipmap/login" />
         <EditText
+            android:id="@+id/login_edit_account"
             android:layout_width="400dp"
             android:layout_height="60dp"
-            android:inputType="textPersonName"
-            android:id="@+id/login_edit_account"
+            android:layout_below="@+id/logo"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="3dp"
             android:drawableLeft="@android:drawable/ic_menu_myplaces"
             android:hint="请输入您的用户名"
-            android:layout_below="@+id/logo"
-            android:layout_marginTop="30dp" />
-
+            android:inputType="textPersonName" />
+        <EditText
+            android:id="@+id/login_edit_pwd"
+            android:layout_width="400dp"
+            android:layout_height="60dp"
+            android:layout_below="@+id/login_edit_account"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="3dp"
+            android:drawableLeft="@android:drawable/ic_lock_idle_lock"
+            android:ems="10"
+            android:hint="请输入您的密码"
+            android:inputType="textPassword" />
         <CheckBox
             android:id="@+id/Login_Remember"
             android:layout_width="wrap_content"
@@ -62,48 +62,50 @@
             android:layout_below="@+id/login_edit_pwd"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="18dp"
+            android:layout_marginRight="10dp"
             android:text="修改密码"
             android:textSize="18dp" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/login_text_change_pwd"
             android:gravity="center"
-            android:paddingTop="70dp"
-            android:layout_below="@+id/login_text_change_pwd">
+            android:paddingTop="70dp">
 
             <Button
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:text="登录"
                 android:id="@+id/login_btn_login"
-                android:onClick="finish_login"
-                android:background="#545bcb"
-                android:textSize="20dp"
-                android:textColor="#ffffff"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"/>
-
-            <Button
                 android:layout_width="60dp"
                 android:layout_height="40dp"
-                android:text="注册"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:background="#545bcb"
+                android:text="登录"
+                android:textColor="#ffffff"
+                android:textSize="20dp" />
+
+            <Button
+                android:id="@+id/login_btn_register"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="60dp"
                 android:layout_toRightOf="@+id/login_btn_login"
-                android:id="@+id/login_btn_register"
-                android:textColor="#ffffff"
                 android:background="#e52525"
-                android:textSize="20dp"/>
+                android:text="注册"
+                android:textColor="#ffffff"
+                android:textSize="20dp" />
         </RelativeLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="10dp"
-            android:textSize="15dp"
+            android:text="跳过>>"
             android:textColor="#ff0000"
-            android:text="跳过>>"/>
+            android:textSize="15dp" />
     </RelativeLayout>
 
 </RelativeLayout>
