@@ -65,8 +65,7 @@ public class SpotListAdapter extends BaseAdapter {
 
         holder.nameTv.setText(model.getName());
         holder.descTv.setText(model.getDescInfo());
-        holder.moneyTv.setText("¥" + model.getTicketPrice());
-        Log.e("adpter", model.getTicketPrice() + "--" + i);
+        holder.moneyTv.setText("¥" + model.getTicketPrice() + "起");
 
         GlideUtil.LoadPic(context, model.getShortPicUrl(), holder.img);
 

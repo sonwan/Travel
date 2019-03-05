@@ -6,10 +6,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
+import com.tj.graduation.travel.activity.spot.activity.SpotDetailActivity;
 import com.tj.graduation.travel.activity.spot.adapter.SpotListAdapter;
 import com.tj.graduation.travel.base.BaseFragment;
 import com.tj.graduation.travel.model.SpotListModel;
@@ -25,10 +27,11 @@ import java.util.List;
  * Created by wangsong on 2019/3/3.
  */
 
-public class SpotListFragment extends BaseFragment {
+public class SpotListFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
     private ListView spotLv;
     private SpotListAdapter adapter;
+    private List<SpotListModel.Data.Item> list;
 
     public static SpotListFragment newInstance() {
         SpotListFragment spotListFragment = new SpotListFragment();
@@ -45,6 +48,7 @@ public class SpotListFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         spotLv = getView().findViewById(R.id.lv_spot_list);
+        spotLv.setOnItemClickListener(this);
 
 
         doQrySpotList();
@@ -58,7 +62,7 @@ public class SpotListFragment extends BaseFragment {
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
                 SpotListModel model = (SpotListModel) responseObj;
-                List<SpotListModel.Data.Item> list = model.getData().getList();
+                list = model.getData().getList();
                 adapter = new SpotListAdapter(getActivity(), list);
                 spotLv.setAdapter(adapter);
             }
@@ -71,6 +75,12 @@ public class SpotListFragment extends BaseFragment {
         });
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+        SpotDetailActivity.startSpotDetailActivity(getActivity(), list.get(i).getId() + "");
+
+    }
 
     private void doRequest(DisposeDataListener listener) {
         RequestParams params = new RequestParams();
@@ -81,4 +91,6 @@ public class SpotListFragment extends BaseFragment {
         RequestUtil.getRequest(Constant.URL + "querySpotList.api", params, listener, SpotListModel.class);
         showProgressDialog();
     }
+
+
 }
