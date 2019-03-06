@@ -32,7 +32,7 @@
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="这是一个昵称"
+            android:text="您还未登陆"
             android:textColor="#ff0000"
             android:textSize="20sp" />
     </RelativeLayout>
@@ -76,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="10000元"
+                android:text="****元"
                 android:gravity="right"
                 android:textSize="15sp"/>
         </LinearLayout>
@@ -139,9 +139,59 @@
             android:background="#efefef"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/collection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/purchase"
+        android:orientation="vertical">
+        <!--item内容部分的容器-->
+        <LinearLayout
+            android:id="@+id/ll_root_collection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp">
+            <!--item左边的Icon-->
+
+            <ImageView
+                android:id="@+id/iv_left_icon_collection"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/collection"/>
+            <!--item中间部分的文字-->
+            <TextView
+                android:id="@+id/tv_text_content_collection"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_weight="1"
+                android:text="我的收藏"
+                android:textSize="18sp"/>
+            <!--item右边的Icon 默认是向右的箭头-->
+            <ImageView
+                android:id="@+id/iv_right_icon_collection"
+                android:layout_width="15dp"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:src="@mipmap/homepage_right_arrow"/>
+        </LinearLayout>
+        <!--item的下分割线-->
+        <View
+            android:id="@+id/divider_bottom_collection"
+            android:layout_width="match_parent"
+            android:layout_height="10px"
+            android:layout_marginLeft="20dp"
+            android:background="#efefef"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/collection"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:gravity="center"
@@ -154,7 +204,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:text="退出登录"
+                android:text="点击登陆"
                 android:textColor="#ffffff"
                 android:textSize="18sp"/>
     </LinearLayout>
