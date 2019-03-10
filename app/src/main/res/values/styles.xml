@@ -39,4 +39,11 @@
         <item name="android:windowExitTransition">@anim/dialog_out</item>
     </style>
 
+    <style name="customHoloLight" parent="@android:style/Theme.Holo.Light">
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
 </resources>

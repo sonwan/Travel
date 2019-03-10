@@ -32,7 +32,7 @@
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="您还未登陆"
+            android:text="您还未登陆..."
             android:textColor="#ff0000"
             android:textSize="20sp" />
     </RelativeLayout>
@@ -189,6 +189,7 @@
             android:background="#efefef"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/ll_login_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/collection"
@@ -199,7 +200,7 @@
         android:background="#FF8C00"
         android:orientation="vertical">
             <TextView
-                android:id="@+id/tv_text_content_Logout"
+                android:id="@+id/login_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"

@@ -1,20 +1,29 @@
 package com.tj.graduation.travel.activity.me.fragment;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
+import com.tj.graduation.travel.activity.login.activity.LoginActivity;
 import com.tj.graduation.travel.base.BaseFragment;
+import com.tj.graduation.travel.model.SpotMeModel;
+import com.tj.graduation.travel.util.ShareUtil;
+import com.tj.graduation.travel.util.http.RequestUtil;
+import com.tj.graduation.travel.util.http.listener.DisposeDataListener;
+import com.tj.graduation.travel.util.http.request.RequestParams;
 
 /**
  * 我的界面
@@ -23,8 +32,13 @@ import com.tj.graduation.travel.base.BaseFragment;
 
 public class MeFragment extends BaseFragment {
 
-    private ImageView img_tx;
+    private ImageView head_img_tx;
     private TextView user_name;
+    private TextView account_tv;
+    private LinearLayout ll_collection;
+    private LinearLayout ll_purchase;
+    private TextView tv_login;
+    private LinearLayout ll_login_btn;
 
     public static MeFragment newInstance(){
         MeFragment meFragment = new MeFragment();
@@ -35,9 +49,100 @@ public class MeFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.me_fragment,container,false);
-        img_tx = view.findViewById(R.id.h_head);
+        head_img_tx = view.findViewById(R.id.h_head);
         user_name = view.findViewById(R.id.user_name);
+        account_tv = view.findViewById(R.id.tv_right_text);
+        ll_collection = view .findViewById(R.id.ll_root_collection);
+        ll_purchase = view .findViewById(R.id.ll_root_purchase);
+        tv_login = view.findViewById(R.id.login_btn);
+        ll_login_btn = view.findViewById(R.id.ll_login_btn);
+//        ShareUtil.put(getActivity(),"loginName","zhangsan");
+//        ShareUtil.put(getActivity(),"login","false");
+//        ShareUtil.put(getActivity(),"username","张三");
+        init();
+
+        user_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShareUtil.put(getActivity(),"loginname","zhangsan");
+//                String a = (String) ShareUtil.get(getActivity(),"username","");
+//                String b = (String) ShareUtil.get(getActivity(),"login","");
+//                Toast.makeText(getActivity(), a+b, Toast.LENGTH_SHORT).show();
+                doQryMeList();
+            }
+        });
         return view;
     }
+    private void init(){
+        if("false".equals(ShareUtil.get(getActivity(),"login",""))){
+            user_name.setText("您还未登录...");
+            account_tv.setText("0");
+            ll_login_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(i);
+                }
+            });
+        }else if("true".equals(ShareUtil.get(getActivity(),"login",""))){
+            doQryMeList();
+            user_name.setText(ShareUtil.get(getActivity(),"username","")+"");
+            tv_login.setText("退出登录");
+            ll_login_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity())
+                            .setTitle("是否退出登录？")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加"Yes"按钮
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    ShareUtil.put(getActivity(),"login","false");
+                                    onResume();
+                                }
+                            })
 
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {//添加取消
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    Toast.makeText(getActivity(), "这是取消按钮", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .create();
+                    alertDialog2.show();
+                }
+            });
+        }
+    }
+
+    private void doQryMeList() {
+        doRequest(new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                dismissProgressDialog();
+                SpotMeModel model = (SpotMeModel) responseObj;
+                Toast.makeText(getActivity(), model.getData().getAccountFee(), Toast.LENGTH_SHORT).show();
+                account_tv.setText(model.getData().getAccountFee()+"");
+                Glide.with(getActivity())
+                        .load(model.getData().getHeadPicUrl())
+                        .into(head_img_tx);
+            }
+
+            @Override
+            public void onFailure(Object responseObj) {
+                dismissProgressDialog();
+                Log.e("msg", "failure");
+            }
+        });
+    }
+    private void doRequest(DisposeDataListener listener) {
+        RequestParams params = new RequestParams();
+        params.put("loginName", (String) ShareUtil.get(getActivity(),"loginName",""));
+        RequestUtil.getRequest(Constant.URL2 + "queryUserInfo.api", params, listener, SpotMeModel.class);
+        showProgressDialog();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 }
