@@ -116,8 +116,8 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
         spotNameTv.setText(model.getData().getDetail().getName());
         SpotDetailPicAdapter adapter = new SpotDetailPicAdapter(SpotDetailActivity.this, model.getData().getPiclist());
         spotPicVp.setAdapter(adapter);
-        spotAddressTv.setText("地址：" + model.getData().getDetail().getAddress());
-        spotOpentimeTv.setText("开放时间：" + model.getData().getDetail().getOpenTime());
+        spotAddressTv.setText(model.getData().getDetail().getAddress());
+        spotOpentimeTv.setText(model.getData().getDetail().getOpenTime());
         spotDescTv.setText(model.getData().getDetail().getDescInfo());
 
         spotPriceTv.setText("需购票 ¥" + model.getData().getDetail().getTicketPrice() + "起");

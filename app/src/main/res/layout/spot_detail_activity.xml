@@ -49,6 +49,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
+                        android:drawableLeft="@drawable/icon_location"
+                        android:drawablePadding="10dp"
                         android:textColor="@color/spot_list_name"
                         android:textSize="17sp" />
 
@@ -56,6 +58,8 @@
                         android:id="@+id/tv_spot_opentime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/icon_time"
+                        android:drawablePadding="10dp"
                         android:textColor="@color/spot_list_name"
                         android:textSize="17sp" />
 
