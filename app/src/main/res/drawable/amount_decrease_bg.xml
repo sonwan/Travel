@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_selected="true">
+
+        <layer-list>
+
+            <item>
+                <shape>
+                    <corners android:bottomLeftRadius="5dp" android:bottomRightRadius="0dp" android:topLeftRadius="5dp" android:topRightRadius="0dp" />
+
+                    <solid android:color="@color/title_layout" />
+                </shape>
+            </item>
+            <item android:bottom="1dp" android:left="1dp" android:top="1dp">
+                <shape>
+                    <corners android:bottomLeftRadius="5dp" android:bottomRightRadius="0dp" android:topLeftRadius="5dp" android:topRightRadius="0dp" />
+
+                    <solid android:color="#ffffff" />
+                </shape>
+            </item>
+
+
+        </layer-list>
+
+    </item>
+
+    <item android:state_selected="false">
+
+        <layer-list>
+
+            <item>
+                <shape>
+                    <corners android:bottomLeftRadius="5dp" android:bottomRightRadius="0dp" android:topLeftRadius="5dp" android:topRightRadius="0dp" />
+
+                    <solid android:color="@color/divider" />
+                </shape>
+            </item>
+            <item android:bottom="1dp" android:left="1dp" android:top="1dp">
+                <shape>
+                    <corners android:bottomLeftRadius="5dp" android:bottomRightRadius="0dp" android:topLeftRadius="5dp" android:topRightRadius="0dp" />
+
+                    <solid android:color="#ffffff" />
+                </shape>
+            </item>
+
+
+        </layer-list>
+
+
+    </item>
+
+</selector>

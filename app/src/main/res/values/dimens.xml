@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="detail_tip">17dp</dimen>
+    <dimen name="detail_content">15dp</dimen>
+    <dimen name="dp13">13dp</dimen>
+
+</resources>

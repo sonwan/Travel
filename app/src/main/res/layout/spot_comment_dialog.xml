@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/title_layout">
+
+        <TextView
+            android:id="@+id/tv_spot_comment_dialog_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="取消"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp13" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="写评论"
+            android:textColor="@color/white"
+            android:textSize="@dimen/detail_content" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_spot_comment_dialog_content"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/comment_edittext_bg"
+        android:gravity="top"
+        android:padding="10dp"
+        android:textColor="@color/spot_list_name"
+        android:textSize="@dimen/detail_content" />
+
+    <TextView
+        android:id="@+id/tv_spot_comment_dialog_publish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/comment_publish_bg"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:text="发布"
+        android:textColor="@color/white"
+        android:textSize="@dimen/detail_content" />
+
+
+</LinearLayout>

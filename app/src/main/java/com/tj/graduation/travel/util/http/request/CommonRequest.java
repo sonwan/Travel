@@ -54,7 +54,7 @@ public class CommonRequest {
 
         //通过请求构建类的build方法获取到真正的请求体对象
         FormBody mFormBody = mFromBodyBuilder.build();
-        return new Request.Builder().url(url).post(mFormBody).build();
+        return new Request.Builder().url(url).addHeader("Content-Type", "application/json").post(mFormBody).build();
     }
 
 }

@@ -39,7 +39,7 @@ public class SpotDetailModel {
     public static class Data {
 
         private Detail detail;
-        private List<picItem> piclist;
+        private List<PicItem> piclist;
 
         public Detail getDetail() {
             return detail;
@@ -49,52 +49,14 @@ public class SpotDetailModel {
             this.detail = detail;
         }
 
-        public List<picItem> getPiclist() {
+        public List<PicItem> getPiclist() {
             return piclist;
         }
 
-        public void setPiclist(List<picItem> piclist) {
+        public void setPiclist(List<PicItem> piclist) {
             this.piclist = piclist;
         }
 
-        public static class picItem {
-            private String descInfo;
-            private String picUrl;
-            private int sortorder;
-            private int id;
-
-            public String getDescInfo() {
-                return descInfo;
-            }
-
-            public void setDescInfo(String descInfo) {
-                this.descInfo = descInfo;
-            }
-
-            public String getPicUrl() {
-                return picUrl;
-            }
-
-            public void setPicUrl(String picUrl) {
-                this.picUrl = picUrl;
-            }
-
-            public int getSortorder() {
-                return sortorder;
-            }
-
-            public void setSortorder(int sortorder) {
-                this.sortorder = sortorder;
-            }
-
-            public int getId() {
-                return id;
-            }
-
-            public void setId(int id) {
-                this.id = id;
-            }
-        }
 
         public static class Detail {
             private String descInfo;

@@ -8,4 +8,6 @@
     <color name="white">#ffffff</color>
     <color name="spot_list_name">#3b3b3b</color>
     <color name="spot_list_money">#fa6b29</color>
+    <color name="divider">#dddddd</color>
+    <color name="comment_date">#8b8b8b</color>
 </resources>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_spot_buy_all_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="总额：¥"
+            android:textColor="#ff5e3c"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_spot_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv_spot_buy_all_tip"
+            android:textColor="#ff5e3c"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_value_left"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/amount_decrease_bg"
+                android:gravity="center"
+                android:text="-" />
+
+            <EditText
+                android:id="@+id/et_spot_value"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/amount_value_bg"
+                android:focusable="false"
+                android:gravity="center"
+                android:inputType="number"
+                android:text="1" />
+
+            <Button
+                android:id="@+id/tv_value_right"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/amount_increase_bg"
+                android:gravity="center"
+                android:text="+" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tv_buy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/spot_buy_bg"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="购买"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+</LinearLayout>
