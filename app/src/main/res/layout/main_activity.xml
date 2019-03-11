@@ -14,17 +14,26 @@
             android:id="@+id/ll_main_spot"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/main_tab_spot_selector" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
                 android:text="景点"
-                android:textSize="17sp" />
+                android:textColor="@drawable/main_tab_text_selector"
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -33,16 +42,24 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/main_tab_gl_selector" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
                 android:text="攻略"
-                android:textSize="17sp" />
+                android:textColor="@drawable/main_tab_text_selector"
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -51,20 +68,34 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/main_tab_me_selector" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
                 android:text="我的"
-                android:textSize="17sp" />
+                android:textColor="@drawable/main_tab_text_selector"
+                android:textSize="13sp" />
 
         </LinearLayout>
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.7dp"
+        android:layout_above="@id/ll_main_bottom"
+        android:background="@color/tab_text" />
 
     <FrameLayout
         android:id="@+id/fl_main_fragment"

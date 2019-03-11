@@ -23,6 +23,10 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
     private MeFragment meFragment;
     private FragmentTransaction fragmentTransaction;
 
+    private LinearLayout spotLL;
+    private LinearLayout strategyLL;
+    private LinearLayout meLL;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,9 +39,10 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
 
     private void initView() {
 
-        LinearLayout spotLL = findViewById(R.id.ll_main_spot);
-        LinearLayout strategyLL = findViewById(R.id.ll_main_strategy);
-        LinearLayout meLL = findViewById(R.id.ll_main_me);
+        spotLL = findViewById(R.id.ll_main_spot);
+        spotLL.setSelected(true);
+        strategyLL = findViewById(R.id.ll_main_strategy);
+        meLL = findViewById(R.id.ll_main_me);
 
         spotLL.setOnClickListener(this);
         strategyLL.setOnClickListener(this);
@@ -68,13 +73,21 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
 
     }
 
+    private void setTabDefault() {
+        spotLL.setSelected(false);
+        strategyLL.setSelected(false);
+        meLL.setSelected(false);
+    }
+
     @Override
     public void onClick(View view) {
 
         hideFragment();
+        setTabDefault();
         switch (view.getId()) {
             case R.id.ll_main_spot:
 
+                spotLL.setSelected(true);
                 if (spotListFragment == null) {
                     spotListFragment = SpotListFragment.newInstance();
                     fragmentTransaction.add(R.id.fl_main_fragment, spotListFragment);
@@ -85,6 +98,7 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
 
             case R.id.ll_main_strategy:
 
+                strategyLL.setSelected(true);
                 if (strategyListFragment == null) {
                     strategyListFragment = StrategyListFragment.newInstance();
                     fragmentTransaction.add(R.id.fl_main_fragment, strategyListFragment);
@@ -96,6 +110,7 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
 
             case R.id.ll_main_me:
 
+                meLL.setSelected(true);
                 if (meFragment == null) {
                     meFragment = MeFragment.newInstance();
                     fragmentTransaction.add(R.id.fl_main_fragment, meFragment);
