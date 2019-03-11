@@ -7,4 +7,5 @@ package com.tj.graduation.travel;
 public class Constant {
 
     public static final String URL = "http://47.96.191.235:8899/trapp/spot/";
+    public static final String URL2 = "http://47.96.191.235:8899/trapp/user/";
 }
