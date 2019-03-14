@@ -52,6 +52,10 @@ public class BaseActivity extends Activity {
         customTitleHelper.setTitle(title);
     }
 
+    public void setSecondTitle(String secondTitle) {
+        customTitleHelper.setSecondTitle(secondTitle);
+    }
+
     /**
      * 显示网略加载弹框
      */

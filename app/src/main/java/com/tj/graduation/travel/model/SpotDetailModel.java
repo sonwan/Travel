@@ -40,6 +40,15 @@ public class SpotDetailModel {
 
         private Detail detail;
         private List<PicItem> piclist;
+        private List<GuideModel> guidelist;
+
+        public List<GuideModel> getGuidelist() {
+            return guidelist;
+        }
+
+        public void setGuidelist(List<GuideModel> guidelist) {
+            this.guidelist = guidelist;
+        }
 
         public Detail getDetail() {
             return detail;

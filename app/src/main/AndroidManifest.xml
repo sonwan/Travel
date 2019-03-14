@@ -32,6 +32,16 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity
+            android:name=".activity.spot.activity.SpotCommentActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".activity.spot.activity.SpotGuideDetailActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
     </application>
 
 </manifest>

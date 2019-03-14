@@ -49,6 +49,10 @@ public class BaseFragmentActivity extends FragmentActivity {
 
     }
 
+    public void setSecondTitle(String secondTitle) {
+        customTitleHelper.setSecondTitle(secondTitle);
+    }
+
     /**
      * 设置标题
      *
