@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/h_back"
@@ -11,11 +12,12 @@
         android:scaleType="centerCrop"
         android:layout_height="200dp" />
 
-    <com.tj.graduation.travel.util.CircleImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/h_head"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@mipmap/tx_not"
+        app:riv_oval="true"
         android:layout_marginTop="60dp"
         android:layout_centerHorizontal="true"
         android:scaleType="fitXY" />
