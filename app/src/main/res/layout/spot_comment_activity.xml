@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:id="@+id/ll_comment_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="25dp"
+            android:background="@drawable/spot_detail_line_bg" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="游客评论"
+            android:textColor="@color/spot_list_name"
+            android:textSize="@dimen/detail_tip"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tv_spot_comment_write"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_write"
+            android:padding="10dp"
+            android:text="写点评"
+            android:textColor="@color/spot_list_name"
+            android:textSize="@dimen/detail_content" />
+    </LinearLayout>
+
+
+    <com.tj.graduation.travel.util.pulltorefresh.PullToRefreshListView
+        android:id="@+id/lv_spot_detail_comment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/tv_spot_comment_write"
+        android:layout_below="@id/ll_comment_tip"
+        android:divider="@color/divider"
+        android:dividerHeight="0.7dp"
+        android:listSelector="@android:color/transparent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+
+    </com.tj.graduation.travel.util.pulltorefresh.PullToRefreshListView>
+
+
+</RelativeLayout>

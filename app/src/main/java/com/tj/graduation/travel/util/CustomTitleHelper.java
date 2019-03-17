@@ -16,12 +16,14 @@ public class CustomTitleHelper {
     private Activity activity;
     private TextView backTv;
     private TextView titleTv;
+    private TextView secondTitleTv;
 
-    public CustomTitleHelper(Context context){
+    public CustomTitleHelper(Context context) {
         this.activity = (Activity) context;
 
         backTv = activity.findViewById(R.id.tv_custom_back);
         titleTv = activity.findViewById(R.id.tv_custom_title);
+        secondTitleTv = activity.findViewById(R.id.tv_custom_second_title);
         backTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -31,8 +33,13 @@ public class CustomTitleHelper {
 
     }
 
-    public void setTitle(String title){
+    public void setTitle(String title) {
         titleTv.setText(title);
+    }
+
+    public void setSecondTitle(String secondTitle) {
+        secondTitleTv.setVisibility(View.VISIBLE);
+        secondTitleTv.setText(secondTitle);
     }
 
 }

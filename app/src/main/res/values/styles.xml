@@ -9,7 +9,7 @@
     </style>
 
     <style name="CustomTitleTheme" parent="android:Theme.Light">
-        <item name="android:windowTitleSize">45dp</item>
+        <item name="android:windowTitleSize">50dp</item>
         <item name="android:windowTitleBackgroundStyle">@style/CustomTitleBackgroundStyle</item>
         <item name="android:windowContentOverlay">@android:color/transparent</item>
 

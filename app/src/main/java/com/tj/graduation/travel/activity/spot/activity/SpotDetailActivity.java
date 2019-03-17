@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -20,10 +21,12 @@ import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
 import com.tj.graduation.travel.activity.spot.adapter.SpotCommentAdapter;
 import com.tj.graduation.travel.activity.spot.adapter.SpotDetailPicAdapter;
+import com.tj.graduation.travel.activity.spot.adapter.SpotGuideAdapter;
 import com.tj.graduation.travel.base.BaseActivity;
 import com.tj.graduation.travel.dialog.SpotBuyDialog;
 import com.tj.graduation.travel.dialog.SpotCommentDialog;
 import com.tj.graduation.travel.model.CommentModel;
+import com.tj.graduation.travel.model.GuideModel;
 import com.tj.graduation.travel.model.SpotDetailModel;
 import com.tj.graduation.travel.util.Utils;
 import com.tj.graduation.travel.util.http.RequestUtil;
@@ -51,12 +54,14 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
     private TextView spotCommentTv;
     private TextView buyTv;
     private NoScrollListView commentLv;
+    private NoScrollListView guideLv;
     private ScrollView sv;
 
     private ViewPager spotPicVp;
 
     private String spotid;
     private List<CommentModel> list;
+    private SpotDetailModel model;
 
 
     @Override
@@ -86,8 +91,13 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
         buyTv = findViewById(R.id.tv_spot_buy);
         buyTv.setOnClickListener(this);
 
+        TextView lookAllTv = findViewById(R.id.tv_spot_comment_lookall);
+        lookAllTv.setOnClickListener(this);
         commentLv = findViewById(R.id.lv_spot_detail_comment);
         commentLv.setFocusable(false);
+
+        guideLv = findViewById(R.id.lv_spot_detail_guide);
+
         sv = findViewById(R.id.sv_spot_detail);
 
     }
@@ -98,7 +108,7 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
-                SpotDetailModel model = (SpotDetailModel) responseObj;
+                model = (SpotDetailModel) responseObj;
                 setData(model);
 
             }
@@ -122,8 +132,18 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
 
         spotPriceTv.setText("需购票 ¥" + model.getData().getDetail().getTicketPrice() + "起");
         spotTrafficTv.setText(model.getData().getDetail().getTrafficInfo());
-        spotTeleTv.setText("电话：" + Html.fromHtml("<font color=#1196EE>" + model.getData().getDetail().getTelephone() + "</font>"));
+        spotTeleTv.setText(Html.fromHtml("电话：<font color=#1196EE>" + model.getData().getDetail().getTelephone() + "</font>"));
 
+        final List<GuideModel> guideModels = model.getData().getGuidelist();
+        SpotGuideAdapter spotGuideAdapter = new SpotGuideAdapter(this, guideModels);
+        guideLv.setAdapter(spotGuideAdapter);
+        guideLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                SpotGuideDetailActivity.startSpotGuideDetailActivity(SpotDetailActivity.this, guideModels.get(i).getId());
+            }
+        });
 
         initCommentData();
         commentAdapter = new SpotCommentAdapter(this, list);
@@ -137,13 +157,13 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
         list.add(new CommentModel("1", "张三", "都说女人是衣服，姐是你们穿不起的牌子。", "2019-03-01 07:20"));
         list.add(new CommentModel("1", "里斯", "我在等待不是等待你回来，而是等待自己释怀。", "2019-03-01 07:20"));
         list.add(new CommentModel("1", "王五", "喜欢在心情不好的时候，跑去篮球场，把那些坏心情都投进篮筐里。", "2019-03-01 07:20"));
-        list.add(new CommentModel("1", "找刘", "有些事情无须争辩，表面服从，偷偷反抗。", "2019-03-01 07:20"));
-        list.add(new CommentModel("1", "测试一", "那么牛X，为什么天安门挂的照片不是你的。", "2019-03-01 07:20"));
-        list.add(new CommentModel("1", "张伟", "我们的空间，彼此都没有访问权限。", "2019-03-01 07:20"));
-        list.add(new CommentModel("1", "丽丽", "你是黑社会怎么了?靠，我就不会入党?", "2019-03-01 07:20"));
-        list.add(new CommentModel("1", "上官", "青春不散场，离别的时刻请带上我们的祝愿，在未知的将来迎风远航、劈波斩浪、一路豪歌!", "2019-03-01 07:20"));
-        list.add(new CommentModel("1", "西门", "人就为争一口气，逼出来的却是一坨屎!", "2019-03-01 07:20"));
-        list.add(new CommentModel("1", "欧阳", "一个男的最无能的一句话就是：你要是这么想我也没办法。", "2019-03-01 07:20"));
+//        list.add(new CommentModel("1", "找刘", "有些事情无须争辩，表面服从，偷偷反抗。", "2019-03-01 07:20"));
+//        list.add(new CommentModel("1", "测试一", "那么牛X，为什么天安门挂的照片不是你的。", "2019-03-01 07:20"));
+//        list.add(new CommentModel("1", "张伟", "我们的空间，彼此都没有访问权限。", "2019-03-01 07:20"));
+//        list.add(new CommentModel("1", "丽丽", "你是黑社会怎么了?靠，我就不会入党?", "2019-03-01 07:20"));
+//        list.add(new CommentModel("1", "上官", "青春不散场，离别的时刻请带上我们的祝愿，在未知的将来迎风远航、劈波斩浪、一路豪歌!", "2019-03-01 07:20"));
+//        list.add(new CommentModel("1", "西门", "人就为争一口气，逼出来的却是一坨屎!", "2019-03-01 07:20"));
+//        list.add(new CommentModel("1", "欧阳", "一个男的最无能的一句话就是：你要是这么想我也没办法。", "2019-03-01 07:20"));
 
     }
 
@@ -199,6 +219,11 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
                     }
                 });
 
+                break;
+
+            case R.id.tv_spot_comment_lookall:
+
+                SpotCommentActivity.startSpotCommentActivity(this, model.getData().getDetail().getName());
                 break;
 
         }
