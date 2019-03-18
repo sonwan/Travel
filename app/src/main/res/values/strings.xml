@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Travel</string>
+    <string name="comment_no_data">暂无评论</string>
 </resources>

@@ -5,10 +5,10 @@
     android:orientation="vertical">
 
 
-    <ListView
+    <com.tj.graduation.travel.util.pulltorefresh.PullToRefreshListView
         android:id="@+id/lv_spot_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </ListView>
+    </com.tj.graduation.travel.util.pulltorefresh.PullToRefreshListView>
 </LinearLayout>

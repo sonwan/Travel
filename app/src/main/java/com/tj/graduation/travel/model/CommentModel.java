@@ -1,55 +1,123 @@
 package com.tj.graduation.travel.model;
 
+import java.util.List;
+
 /**
+ * 景点/攻略评论
  * Created by wangsong on 2019/3/9.
  */
 
 public class CommentModel {
 
-    private String userId;
-    private String userName;
-    private String comContent;
-    private String comTime;
 
-    public CommentModel(String userId, String userName, String comContent, String comTime) {
-        this.userId = userId;
-        this.userName = userName;
-        this.comContent = comContent;
-        this.comTime = comTime;
+    private String msg;
+    private int code;
+    private CommentData data;
+
+    public String getMsg() {
+        return msg;
     }
 
-    public CommentModel() {
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public String getUserId() {
-        return userId;
+    public int getCode() {
+        return code;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getUserName() {
-        return userName;
+    public CommentData getData() {
+        return data;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setData(CommentData data) {
+        this.data = data;
     }
 
-    public String getComContent() {
-        return comContent;
+    public static class CommentData {
+
+        private String linkId;
+        private String linkName;
+        private String type;  //JD:景点评论类型  GL:攻略评论类型
+        private List<CommentList> list;
+
+        public String getLinkId() {
+            return linkId;
+        }
+
+        public void setLinkId(String linkId) {
+            this.linkId = linkId;
+        }
+
+        public String getLinkName() {
+            return linkName;
+        }
+
+        public void setLinkName(String linkName) {
+            this.linkName = linkName;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public List<CommentList> getList() {
+            return list;
+        }
+
+        public void setList(List<CommentList> list) {
+            this.list = list;
+        }
+
+        public static class CommentList {
+            private String userId;
+            private String userName;
+            private String comContent;
+            private String comTime;
+
+
+            public String getUserId() {
+                return userId;
+            }
+
+            public void setUserId(String userId) {
+                this.userId = userId;
+            }
+
+            public String getUserName() {
+                return userName;
+            }
+
+            public void setUserName(String userName) {
+                this.userName = userName;
+            }
+
+            public String getComContent() {
+                return comContent;
+            }
+
+            public void setComContent(String comContent) {
+                this.comContent = comContent;
+            }
+
+            public String getComTime() {
+                return comTime;
+            }
+
+            public void setComTime(String comTime) {
+                this.comTime = comTime;
+            }
+        }
+
     }
 
-    public void setComContent(String comContent) {
-        this.comContent = comContent;
-    }
 
-    public String getComTime() {
-        return comTime;
-    }
-
-    public void setComTime(String comTime) {
-        this.comTime = comTime;
-    }
 }

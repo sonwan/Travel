@@ -1,7 +1,6 @@
 package com.tj.graduation.travel.activity.spot.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +29,21 @@ public class SpotListAdapter extends BaseAdapter {
         this.context = context;
         this.list = list;
         inflater = LayoutInflater.from(context);
+    }
+
+    public void addAll(List<SpotListModel.Data.Item> curlist) {
+        this.list.addAll(curlist);
+        notifyDataSetChanged();
+    }
+
+    public void setList(List<SpotListModel.Data.Item> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        this.list.clear();
+        notifyDataSetChanged();
     }
 
     @Override

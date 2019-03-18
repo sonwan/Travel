@@ -316,34 +316,56 @@
                         android:textColor="@color/title_layout"
                         android:textSize="@dimen/detail_content" />
 
-
-                    <com.tj.graduation.travel.view.NoScrollListView
-                        android:id="@+id/lv_spot_detail_comment"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_below="@id/ll_comment_tip"
-                        android:divider="@color/divider"
-                        android:dividerHeight="0.7dp"
-                        android:listSelector="@android:color/transparent">
-
-
-                    </com.tj.graduation.travel.view.NoScrollListView>
-
-                    <TextView
-                        android:id="@+id/tv_spot_comment_lookall"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_below="@id/lv_spot_detail_comment"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/spot_comment_look_bg"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
-                        android:paddingTop="5dp"
-                        android:text="查看全部点评"
-                        android:textColor="@color/title_layout" />
+                        android:layout_below="@id/ll_comment_tip">
+
+                        <LinearLayout
+                            android:id="@+id/ll_spot_detail_comment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical"
+                            android:visibility="visible">
+
+                            <com.tj.graduation.travel.view.NoScrollListView
+                                android:id="@+id/lv_spot_detail_comment"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:divider="@color/divider"
+                                android:dividerHeight="0.7dp"
+                                android:listSelector="@android:color/transparent">
+
+
+                            </com.tj.graduation.travel.view.NoScrollListView>
+
+                            <TextView
+                                android:id="@+id/tv_spot_comment_lookall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:background="@drawable/spot_comment_look_bg"
+                                android:paddingBottom="5dp"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="15dp"
+                                android:paddingTop="5dp"
+                                android:text="查看全部点评"
+                                android:textColor="@color/title_layout" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_comment_nodata"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:gravity="center"
+                            android:text="@string/comment_no_data"
+                            android:textColor="@color/comment_date"
+                            android:textSize="20sp"
+                            android:visibility="gone" />
+                    </FrameLayout>
+
 
                 </RelativeLayout>
 

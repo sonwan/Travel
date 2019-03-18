@@ -19,10 +19,10 @@ import java.util.List;
 public class SpotCommentAdapter extends BaseAdapter {
 
     private Context context;
-    private List<CommentModel> list;
+    private List<CommentModel.CommentData.CommentList> list;
     private LayoutInflater inflater;
 
-    public SpotCommentAdapter(Context context, List<CommentModel> list) {
+    public SpotCommentAdapter(Context context, List<CommentModel.CommentData.CommentList> list) {
         this.context = context;
         this.list = list;
         inflater = LayoutInflater.from(context);
@@ -46,7 +46,7 @@ public class SpotCommentAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
-        CommentModel model = list.get(i);
+        CommentModel.CommentData.CommentList model = list.get(i);
         ViewHolder holder = null;
 
         if (view == null) {
