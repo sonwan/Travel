@@ -59,7 +59,7 @@ public class MeFragment extends BaseFragment {
         tv_login = view.findViewById(R.id.login_btn);
         ll_login_btn = view.findViewById(R.id.ll_login_btn);
 //        ShareUtil.put(getActivity(),"loginName","zhangsan");
-        ShareUtil.put(getActivity(),"login","true");
+//        ShareUtil.put(getActivity(),"login","true");
 //        ShareUtil.put(getActivity(),"username","张三");
         init();
 

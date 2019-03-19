@@ -25,7 +25,7 @@ import com.tj.graduation.travel.util.http.request.RequestParams;
 public class LoginActivity extends BaseActivity {
 
     private Button login_btn_login;
-    private TextView tv_btn_change_pwd;
+    private Button login_btn_register;
     private EditText user_name;
     private EditText pwd;
     private CheckBox checkBox;
@@ -43,7 +43,7 @@ public class LoginActivity extends BaseActivity {
 
     private void initView() {
         login_btn_login = findViewById(R.id.login_btn_login);
-        tv_btn_change_pwd = findViewById(R.id.login_text_change_pwd);
+        login_btn_register = findViewById(R.id.login_btn_register);
         user_name = findViewById(R.id.login_edit_account);
         checkBox = findViewById(R.id.login_remember);
         pwd = findViewById(R.id.login_edit_pwd);
@@ -70,7 +70,7 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         });
-        tv_btn_change_pwd.setOnClickListener(new View.OnClickListener() {
+        login_btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getBaseContext(), ChangePasswordActivity.class);
@@ -85,9 +85,9 @@ public class LoginActivity extends BaseActivity {
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
                 UserLogin model = (UserLogin) responseObj;
-                if (!"0".equals(model.getCode())) {
-                    ToastUtil.showToastText(getBaseContext(), model.getMsg());
-                } else {
+//                if (!"0".equals(model.getCode()+"")) {
+//                    ToastUtil.showToastText(getBaseContext(), model.getMsg());
+//                } else {
 
                     checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
@@ -100,13 +100,13 @@ public class LoginActivity extends BaseActivity {
                         }
                     });
 
-                    ShareUtil.put(getBaseContext(), "loginName", model.getData().getLoginname());
-                    ShareUtil.put(getBaseContext(), "username", model.getData().getUsername());
+                    ShareUtil.put(getBaseContext(), "loginName", model.getData().getLoginName());
+                    ShareUtil.put(getBaseContext(), "username", model.getData().getUserName());
                     ShareUtil.put(getBaseContext(), "login", "true");
                     Intent intent = new Intent(getBaseContext(), MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
-                }
+//                }
             }
 
             @Override
@@ -121,8 +121,8 @@ public class LoginActivity extends BaseActivity {
         RequestParams params = new RequestParams();
         String userid = user_name.getText().toString();
         String password = pwd.getText().toString();
-        params.put("loginname", userid);
-        params.put("password", password);
+        params.put("loginName", userid);
+        params.put("passWord", password);
         RequestUtil.getRequest(Constant.URL2 + "queryUserInfo.api", params, listener, UserLogin.class);
         showProgressDialog();
     }

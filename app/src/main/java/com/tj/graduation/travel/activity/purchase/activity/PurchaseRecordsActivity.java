@@ -10,7 +10,6 @@ import com.tj.graduation.travel.R;
 import com.tj.graduation.travel.activity.purchase.adapter.PurchaseRecordsAdapter;
 import com.tj.graduation.travel.base.BaseActivity;
 import com.tj.graduation.travel.model.PurchaseModel;
-import com.tj.graduation.travel.util.ShareUtil;
 import com.tj.graduation.travel.util.http.RequestUtil;
 import com.tj.graduation.travel.util.http.listener.DisposeDataListener;
 import com.tj.graduation.travel.util.http.request.RequestParams;

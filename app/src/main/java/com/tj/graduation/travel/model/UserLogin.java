@@ -30,12 +30,28 @@ public class UserLogin {
     }
 
     public static class Data{
-        private String loginname;
+        private String loginName;
         private String sex;
         private String id;
-        private String username;
+        private String userName;
         private String age;
         private String accountfee;
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
+        public String getLoginName() {
+            return loginName;
+        }
+
+        public void setLoginName(String loginName) {
+            this.loginName = loginName;
+        }
 
         public String getAccountfee() {
             return accountfee;
@@ -43,14 +59,6 @@ public class UserLogin {
 
         public void setAccountfee(String accountfee) {
             this.accountfee = accountfee;
-        }
-
-        public String getLoginname() {
-            return loginname;
-        }
-
-        public void setLoginname(String loginname) {
-            this.loginname = loginname;
         }
 
         public String getSex() {
@@ -67,14 +75,6 @@ public class UserLogin {
 
         public void setId(String id) {
             this.id = id;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
         }
 
         public String getAge() {

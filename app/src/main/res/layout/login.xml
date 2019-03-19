@@ -47,6 +47,7 @@
             android:hint="请输入您的密码"
             android:inputType="textPassword" />
         <CheckBox
+            android:visibility="invisible"
             android:id="@+id/login_remember"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,21 +57,10 @@
             android:text="记住密码"
             android:textSize="18dp" />
 
-        <TextView
-            android:id="@+id/login_text_change_pwd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/login_edit_pwd"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="18dp"
-            android:layout_marginRight="10dp"
-            android:text="修改密码"
-            android:textSize="18dp" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/login_text_change_pwd"
+            android:layout_below="@+id/login_remember"
             android:gravity="center"
             android:paddingTop="70dp">
 
