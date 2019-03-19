@@ -4,27 +4,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
 import com.tj.graduation.travel.activity.spot.adapter.SpotCommentAdapter;
 import com.tj.graduation.travel.base.BaseActivity;
 import com.tj.graduation.travel.dialog.SpotCommentDialog;
 import com.tj.graduation.travel.model.CommentModel;
 import com.tj.graduation.travel.util.Utils;
+import com.tj.graduation.travel.util.http.RequestUtil;
+import com.tj.graduation.travel.util.http.listener.DisposeDataListener;
+import com.tj.graduation.travel.util.http.request.RequestParams;
 import com.tj.graduation.travel.util.pulltorefresh.ILoadingLayout;
 import com.tj.graduation.travel.util.pulltorefresh.PullToRefreshBase;
 import com.tj.graduation.travel.util.pulltorefresh.PullToRefreshListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,12 +39,16 @@ import java.util.List;
 public class SpotCommentActivity extends BaseActivity implements View.OnClickListener {
 
     private String spotname;
-    private List<CommentModel> list;
+    private List<CommentModel.CommentData.CommentList> list = new ArrayList<>();
     private PullToRefreshListView commentLv;
+    private TextView nodataTv;
+
     private SpotCommentAdapter commentAdapter;
-    private int requestcount = 20;
+    private int requestcount = 10;
     private int index = 1;
     private String type;
+    private String spotId;
+    private String commenttype;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,12 +59,13 @@ public class SpotCommentActivity extends BaseActivity implements View.OnClickLis
         getIntentData();
         setTItle("点评");
         setSecondTitle(spotname);
-
         initView();
+        doQryCommentList();
     }
 
     private void initView() {
         LinearLayout writeLL = findViewById(R.id.tv_spot_comment_write);
+        nodataTv = findViewById(R.id.tv_comment_nodata);
         writeLL.setOnClickListener(this);
         commentLv = findViewById(R.id.lv_spot_detail_comment);
         commentLv.setMode(PullToRefreshBase.Mode.BOTH);
@@ -77,59 +86,76 @@ public class SpotCommentActivity extends BaseActivity implements View.OnClickLis
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 type = "refresh";
 
-                Log.e("SpotCommentActivity", "refresh---");
                 index = 1;
-                new GetDataTask().execute();
+                doQryCommentList();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 type = "load";
                 ++index;
-                new GetDataTask().execute();
-                Log.e("SpotCommentActivity", "load---");
+                doQryCommentList();
             }
         });
 
-//        commentAdapter = new SpotCommentAdapter(this, list);
-//        commentLv.setAdapter(commentAdapter);
+        commentAdapter = new SpotCommentAdapter(this, new ArrayList<CommentModel.CommentData.CommentList>());
+        commentLv.setAdapter(commentAdapter);
 
     }
 
-    private class GetDataTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            // Simulates a background job.
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-            commentLv.onRefreshComplete();
-            if ("refresh".endsWith(type)) {
-
-            } else {
-                commentAdapter.notifyDataSetChanged();
+    private void doQryCommentList() {
+        RequestParams params = new RequestParams();
+        params.put("curpagenum", index + "");
+        params.put("pagecount", requestcount + "");
+        params.put("type", commenttype);
+        params.put("linkId", spotId);
+        RequestUtil.getRequest(Constant.COMMENT_URL, params, new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                dismissProgressDialog();
+                commentLv.onRefreshComplete();
+                CommentModel model = (CommentModel) responseObj;
+                setCommentData(model);
             }
 
-            super.onPostExecute(result);
-        }
+            @Override
+            public void onFailure(Object responseObj) {
+                dismissProgressDialog();
+                commentLv.onRefreshComplete();
+            }
+        }, CommentModel.class);
+        showProgressDialog();
     }
 
+    private void setCommentData(CommentModel model) {
+        List<CommentModel.CommentData.CommentList> commentList = model.getData().getList();
+        if ("refresh".equals(type)) {
+            list.clear();
+            commentAdapter.clear();
+        }
+        list.addAll(commentList);
+        if (list.size() > 0) {
+            commentLv.setVisibility(View.VISIBLE);
+            nodataTv.setVisibility(View.GONE);
+            commentAdapter.setList(list);
+        } else {
+            commentLv.setVisibility(View.GONE);
+            nodataTv.setVisibility(View.VISIBLE);
+        }
+
+    }
 
     private void getIntentData() {
         spotname = getIntent().getStringExtra("spotname");
+        spotId = getIntent().getStringExtra("spotId");
+        commenttype = getIntent().getStringExtra("type");
     }
 
-    public static void startSpotCommentActivity(Context context, String spotname) {
+    public static void startSpotCommentActivity(Context context, String spotname, String spotId, String type) {
         Intent intent = new Intent(context, SpotCommentActivity.class);
         intent.putExtra("spotname", spotname);
+        intent.putExtra("spotId", spotId);
+        intent.putExtra("type", type);
         context.startActivity(intent);
     }
 

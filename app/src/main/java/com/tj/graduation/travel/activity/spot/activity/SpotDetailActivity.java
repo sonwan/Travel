@@ -29,6 +29,7 @@ import com.tj.graduation.travel.dialog.SpotCommentDialog;
 import com.tj.graduation.travel.model.CommentModel;
 import com.tj.graduation.travel.model.GuideModel;
 import com.tj.graduation.travel.model.SpotDetailModel;
+import com.tj.graduation.travel.util.StringUtils;
 import com.tj.graduation.travel.util.Utils;
 import com.tj.graduation.travel.util.http.RequestUtil;
 import com.tj.graduation.travel.util.http.listener.DisposeDataListener;
@@ -125,30 +126,53 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
         });
     }
 
-    private SpotCommentAdapter commentAdapter;
-
     private void setData(SpotDetailModel model) {
         spotNameTv.setText(model.getData().getDetail().getName());
-        SpotDetailPicAdapter adapter = new SpotDetailPicAdapter(SpotDetailActivity.this, model.getData().getPiclist());
-        spotPicVp.setAdapter(adapter);
+        if (model.getData().getPiclist() != null && model.getData().getPiclist().size() > 0) {
+            spotPicVp.setVisibility(View.VISIBLE);
+            SpotDetailPicAdapter adapter = new SpotDetailPicAdapter(SpotDetailActivity.this, model.getData().getPiclist());
+            spotPicVp.setAdapter(adapter);
+        } else {
+            spotPicVp.setVisibility(View.GONE);
+        }
+
         spotAddressTv.setText(model.getData().getDetail().getAddress());
         spotOpentimeTv.setText(model.getData().getDetail().getOpenTime());
         spotDescTv.setText(model.getData().getDetail().getDescInfo());
 
-        spotPriceTv.setText("需购票 ¥" + model.getData().getDetail().getTicketPrice() + "起");
-        spotTrafficTv.setText(model.getData().getDetail().getTrafficInfo());
+        if (Float.parseFloat(model.getData().getDetail().getTicketPrice()) == 0) {
+            spotPriceTv.setText("免费");
+            buyTv.setVisibility(View.GONE);
+
+        } else {
+            spotPriceTv.setText("需购票 ¥" + model.getData().getDetail().getTicketPrice() + "起");
+            buyTv.setVisibility(View.VISIBLE);
+        }
+
+        if (!StringUtils.isEmpty(model.getData().getDetail().getTrafficInfo())) {
+            spotTrafficTv.setText(model.getData().getDetail().getTrafficInfo());
+        } else {
+            spotTrafficTv.setText("无");
+        }
+
         spotTeleTv.setText(Html.fromHtml("电话：<font color=#1196EE>" + model.getData().getDetail().getTelephone() + "</font>"));
 
         final List<GuideModel> guideModels = model.getData().getGuidelist();
-        SpotGuideAdapter spotGuideAdapter = new SpotGuideAdapter(this, guideModels);
-        guideLv.setAdapter(spotGuideAdapter);
-        guideLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        if (guideModels != null && guideModels.size() > 0) {
+            guideLv.setVisibility(View.VISIBLE);
+            SpotGuideAdapter spotGuideAdapter = new SpotGuideAdapter(this, guideModels);
+            guideLv.setAdapter(spotGuideAdapter);
+            guideLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                SpotGuideDetailActivity.startSpotGuideDetailActivity(SpotDetailActivity.this, guideModels.get(i).getId());
-            }
-        });
+                    SpotGuideDetailActivity.startSpotGuideDetailActivity(SpotDetailActivity.this, guideModels.get(i).getId());
+                }
+            });
+        } else {
+            guideLv.setVisibility(View.GONE);
+        }
+
 
         sv.fullScroll(ScrollView.FOCUS_UP);
         doQryCommentList();
@@ -215,7 +239,7 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
 
             case R.id.tv_spot_buy:
 
-                SpotBuyDialog dialog = new SpotBuyDialog(this);
+                SpotBuyDialog dialog = new SpotBuyDialog(this, model.getData().getDetail().getTicketPrice());
                 dialog.show();
 
                 break;
@@ -244,7 +268,7 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
 
             case R.id.tv_spot_comment_lookall:
 
-                SpotCommentActivity.startSpotCommentActivity(this, model.getData().getDetail().getName());
+                SpotCommentActivity.startSpotCommentActivity(this, model.getData().getDetail().getName(), spotid, "JD");
                 break;
 
         }

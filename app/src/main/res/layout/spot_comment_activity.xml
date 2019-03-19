@@ -48,20 +48,34 @@
     </LinearLayout>
 
 
-    <com.tj.graduation.travel.util.pulltorefresh.PullToRefreshListView
-        android:id="@+id/lv_spot_detail_comment"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/tv_spot_comment_write"
-        android:layout_below="@id/ll_comment_tip"
-        android:divider="@color/divider"
-        android:dividerHeight="0.7dp"
-        android:listSelector="@android:color/transparent"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:layout_below="@id/ll_comment_tip">
 
+        <com.tj.graduation.travel.util.pulltorefresh.PullToRefreshListView
+            android:id="@+id/lv_spot_detail_comment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/divider"
+            android:dividerHeight="0.7dp"
+            android:listSelector="@android:color/transparent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
-    </com.tj.graduation.travel.util.pulltorefresh.PullToRefreshListView>
+        </com.tj.graduation.travel.util.pulltorefresh.PullToRefreshListView>
+
+        <TextView
+            android:id="@+id/tv_comment_nodata"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:gravity="center"
+            android:text="@string/comment_no_data"
+            android:textColor="@color/comment_date"
+            android:textSize="20sp"
+            android:visibility="gone" />
+    </FrameLayout>
 
 
 </RelativeLayout>

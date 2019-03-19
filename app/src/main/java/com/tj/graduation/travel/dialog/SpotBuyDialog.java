@@ -9,18 +9,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tj.graduation.travel.R;
-import com.tj.graduation.travel.activity.spot.activity.SpotDetailActivity;
 import com.tj.graduation.travel.util.ToastUtil;
 import com.tj.graduation.travel.util.Utils;
 
@@ -35,11 +30,12 @@ public class SpotBuyDialog extends Dialog implements View.OnClickListener {
     private TextView allTv;
     private int currentnum = 1;
     private int maxnum = 99;
-    private int price = 20;
+    private int price;
 
-    public SpotBuyDialog(@NonNull Context context) {
+    public SpotBuyDialog(@NonNull Context context, String price) {
         super(context, R.style.loading_dialog);
         this.activity = (Activity) context;
+        this.price = (int) Float.parseFloat(price);
     }
 
     @Override

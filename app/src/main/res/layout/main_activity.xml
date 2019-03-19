@@ -45,7 +45,8 @@
             android:gravity="center"
             android:orientation="vertical"
             android:paddingBottom="5dp"
-            android:paddingTop="5dp">
+            android:paddingTop="5dp"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="wrap_content"

@@ -22,6 +22,17 @@ public class SpotCommentAdapter extends BaseAdapter {
     private List<CommentModel.CommentData.CommentList> list;
     private LayoutInflater inflater;
 
+
+    public void setList(List<CommentModel.CommentData.CommentList> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        this.list.clear();
+        notifyDataSetChanged();
+    }
+
     public SpotCommentAdapter(Context context, List<CommentModel.CommentData.CommentList> list) {
         this.context = context;
         this.list = list;
