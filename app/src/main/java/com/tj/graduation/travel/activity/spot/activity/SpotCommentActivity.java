@@ -20,6 +20,8 @@ import com.tj.graduation.travel.activity.spot.adapter.SpotCommentAdapter;
 import com.tj.graduation.travel.base.BaseActivity;
 import com.tj.graduation.travel.dialog.SpotCommentDialog;
 import com.tj.graduation.travel.model.CommentModel;
+import com.tj.graduation.travel.model.CommentSubmitModel;
+import com.tj.graduation.travel.util.ToastUtil;
 import com.tj.graduation.travel.util.Utils;
 import com.tj.graduation.travel.util.http.RequestUtil;
 import com.tj.graduation.travel.util.http.listener.DisposeDataListener;
@@ -109,7 +111,7 @@ public class SpotCommentActivity extends BaseActivity implements View.OnClickLis
         params.put("pagecount", requestcount + "");
         params.put("type", commenttype);
         params.put("linkId", spotId);
-        RequestUtil.getRequest(Constant.COMMENT_URL, params, new DisposeDataListener() {
+        RequestUtil.getRequest(Constant.COMMENT_URL + "queryCommentList.api", params, new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
@@ -142,6 +144,35 @@ public class SpotCommentActivity extends BaseActivity implements View.OnClickLis
             commentLv.setVisibility(View.GONE);
             nodataTv.setVisibility(View.VISIBLE);
         }
+
+    }
+
+    /**
+     * 评论提交接口
+     *
+     * @param content
+     */
+    private void doSubmitComment(String content) {
+
+        RequestParams params = new RequestParams();
+        params.put("linkId", spotId);
+        params.put("type", commenttype);
+        params.put("userId", "");
+        params.put("content", content);
+        RequestUtil.getRequest(Constant.URL + "submitComment.api", params, new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                dismissProgressDialog();
+                ToastUtil.showToastText(SpotCommentActivity.this, "评论成功");
+            }
+
+            @Override
+            public void onFailure(Object responseObj) {
+                dismissProgressDialog();
+                ToastUtil.showToastText(SpotCommentActivity.this, "评论失败");
+            }
+        }, CommentSubmitModel.class);
+        showProgressDialog();
 
     }
 
@@ -178,6 +209,7 @@ public class SpotCommentActivity extends BaseActivity implements View.OnClickLis
                 commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
                     @Override
                     public void OnSpotCommentPublish(String content) {
+                        doSubmitComment(content);
 //                        commentAdapter.notifyDataSetChanged();
 //                        commentDialog.dismiss();
                     }

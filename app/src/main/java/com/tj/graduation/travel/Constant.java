@@ -9,7 +9,7 @@ public class Constant {
     public static final String URL = "http://47.96.191.235:8899/trapp/spot/";
     public static final String URL2 = "http://47.96.191.235:8899/trapp/user/";
     public static final String URL3 = "http://47.96.191.235:8899/trapp/ticket/";
-    public static final String COMMENT_URL = "http://47.96.191.235:8899/trapp/comment/queryCommentList.api";
+    public static final String COMMENT_URL = "http://47.96.191.235:8899/trapp/comment/";
 
     public String login; //是否登录
     public String loginName;//登录名

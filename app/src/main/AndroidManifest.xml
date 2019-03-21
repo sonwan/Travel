@@ -43,6 +43,12 @@
             android:screenOrientation="portrait">
 
         </activity>
+
+        <activity
+            android:name=".activity.spot.activity.SpotGuideSubmitActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
     </application>
 
 </manifest>

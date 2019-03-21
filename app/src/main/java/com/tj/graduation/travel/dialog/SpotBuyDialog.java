@@ -32,6 +32,16 @@ public class SpotBuyDialog extends Dialog implements View.OnClickListener {
     private int maxnum = 99;
     private int price;
 
+    private onSpotBuyFinishListener listener;
+
+    public void setOnSpotBuyFinishListener(onSpotBuyFinishListener listener) {
+        this.listener = listener;
+    }
+
+    public interface onSpotBuyFinishListener {
+        void onSpotBuyFinish(int ticknum);
+    }
+
     public SpotBuyDialog(@NonNull Context context, String price) {
         super(context, R.style.loading_dialog);
         this.activity = (Activity) context;
@@ -148,7 +158,9 @@ public class SpotBuyDialog extends Dialog implements View.OnClickListener {
                 break;
 
             case R.id.tv_buy:
-                ToastUtil.showToastText(activity, "购买");
+//                ToastUtil.showToastText(activity, "购买");
+                listener.onSpotBuyFinish(currentnum);
+
                 break;
         }
     }

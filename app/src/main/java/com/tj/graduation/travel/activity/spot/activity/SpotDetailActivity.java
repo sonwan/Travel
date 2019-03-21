@@ -26,10 +26,13 @@ import com.tj.graduation.travel.activity.spot.adapter.SpotGuideAdapter;
 import com.tj.graduation.travel.base.BaseActivity;
 import com.tj.graduation.travel.dialog.SpotBuyDialog;
 import com.tj.graduation.travel.dialog.SpotCommentDialog;
+import com.tj.graduation.travel.model.BuyTickModel;
 import com.tj.graduation.travel.model.CommentModel;
+import com.tj.graduation.travel.model.CommentSubmitModel;
 import com.tj.graduation.travel.model.GuideModel;
 import com.tj.graduation.travel.model.SpotDetailModel;
 import com.tj.graduation.travel.util.StringUtils;
+import com.tj.graduation.travel.util.ToastUtil;
 import com.tj.graduation.travel.util.Utils;
 import com.tj.graduation.travel.util.http.RequestUtil;
 import com.tj.graduation.travel.util.http.listener.DisposeDataListener;
@@ -79,6 +82,11 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initView() {
+
+        LinearLayout commentLl = findViewById(R.id.ll_comment);
+        LinearLayout guideLL = findViewById(R.id.ll_guide);
+        commentLl.setOnClickListener(this);
+        guideLL.setOnClickListener(this);
 
         spotPicVp = findViewById(R.id.vp_spot_detail);
         spotNameTv = findViewById(R.id.tv_spot_name);
@@ -137,7 +145,7 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
         }
 
         spotAddressTv.setText(model.getData().getDetail().getAddress());
-        spotOpentimeTv.setText(model.getData().getDetail().getOpenTime());
+        spotOpentimeTv.setText(model.getData().getDetail().getOpenTime().trim());
         spotDescTv.setText(model.getData().getDetail().getDescInfo());
 
         if (Float.parseFloat(model.getData().getDetail().getTicketPrice()) == 0) {
@@ -184,7 +192,7 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
         params.put("pagecount", "3");
         params.put("type", "JD");
         params.put("linkId", spotid);
-        RequestUtil.getRequest(Constant.COMMENT_URL, params, new DisposeDataListener() {
+        RequestUtil.getRequest(Constant.COMMENT_URL + "queryCommentList.api", params, new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
@@ -233,6 +241,64 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
         context.startActivity(intent);
     }
 
+    /**
+     * 购票接口
+     */
+    private void dobuyTicket(int ticknum) {
+
+        RequestParams params = new RequestParams();
+        params.put("buyUserId", "");
+        params.put("buySpotId", model.getData().getDetail().getId() + "");
+        params.put("buyFee", model.getData().getDetail().getTicketPrice());
+        params.put("ticketNum", ticknum + "");
+        RequestUtil.getRequest(Constant.URL3 + "buyTicket.api", params, new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+
+                dismissProgressDialog();
+
+            }
+
+            @Override
+            public void onFailure(Object responseObj) {
+
+                dismissProgressDialog();
+            }
+        }, BuyTickModel.class);
+
+        showProgressDialog();
+
+    }
+
+    /**
+     * 评论提交接口
+     *
+     * @param content
+     */
+    private void doSubmitComment(String content) {
+
+        RequestParams params = new RequestParams();
+        params.put("linkId", model.getData().getDetail().getId() + "");
+        params.put("type", "JD");
+        params.put("userId", "");
+        params.put("content", content);
+        RequestUtil.getRequest(Constant.URL + "submitComment.api", params, new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                dismissProgressDialog();
+                ToastUtil.showToastText(SpotDetailActivity.this, "评论成功");
+            }
+
+            @Override
+            public void onFailure(Object responseObj) {
+                dismissProgressDialog();
+                ToastUtil.showToastText(SpotDetailActivity.this, "评论失败");
+            }
+        }, CommentSubmitModel.class);
+        showProgressDialog();
+
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -241,10 +307,22 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
 
                 SpotBuyDialog dialog = new SpotBuyDialog(this, model.getData().getDetail().getTicketPrice());
                 dialog.show();
+                dialog.setOnSpotBuyFinishListener(new SpotBuyDialog.onSpotBuyFinishListener() {
+                    @Override
+                    public void onSpotBuyFinish(int ticknum) {
+                        ToastUtil.showToastText(SpotDetailActivity.this, ticknum + "");
+//                        dobuyTicket(ticknum);
+
+                    }
+                });
 
                 break;
 
             case R.id.tv_spot_detail_comment:
+
+                break;
+
+            case R.id.ll_comment:
 
                 final SpotCommentDialog commentDialog = new SpotCommentDialog(this);
                 commentDialog.setCanceledOnTouchOutside(false);
@@ -259,10 +337,18 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
                 commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
                     @Override
                     public void OnSpotCommentPublish(String content) {
+//                        doSubmitComment(content);
 //                        commentAdapter.notifyDataSetChanged();
 //                        commentDialog.dismiss();
                     }
                 });
+
+                break;
+
+            case R.id.ll_guide:
+
+//                ToastUtil.showToastText(this, "发表攻略");
+                SpotGuideSubmitActivity.startSpotGuideSubmitActivity(this);
 
                 break;
 
