@@ -3,7 +3,6 @@ package com.tj.graduation.travel.activity.me.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -42,7 +41,7 @@ public class MeFragment extends BaseFragment {
     private TextView tv_login;
     private LinearLayout ll_login_btn;
 
-    public static MeFragment newInstance(){
+    public static MeFragment newInstance() {
         MeFragment meFragment = new MeFragment();
         return meFragment;
     }
@@ -50,12 +49,12 @@ public class MeFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.me_fragment,container,false);
+        View view = inflater.inflate(R.layout.me_fragment, container, false);
         head_img_tx = view.findViewById(R.id.h_head);
         user_name = view.findViewById(R.id.user_name);
         account_tv = view.findViewById(R.id.tv_right_text);
-        ll_collection = view .findViewById(R.id.ll_root_collection);
-        ll_purchase = view .findViewById(R.id.ll_root_purchase);
+        ll_collection = view.findViewById(R.id.ll_root_collection);
+        ll_purchase = view.findViewById(R.id.ll_root_purchase);
         tv_login = view.findViewById(R.id.login_btn);
         ll_login_btn = view.findViewById(R.id.ll_login_btn);
 //        ShareUtil.put(getActivity(),"loginName","zhangsan");
@@ -77,9 +76,9 @@ public class MeFragment extends BaseFragment {
         ll_purchase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if("false".equals(ShareUtil.get(getActivity(),"login",""))){
-                    ToastUtil.showToastText(getActivity(),"您还未登陆...");
-                }else{
+                if ("false".equals(ShareUtil.get(getActivity(), "login", ""))) {
+                    ToastUtil.showToastText(getActivity(), "您还未登陆...");
+                } else {
                     Intent i = new Intent(getActivity(), PurchaseRecordsActivity.class);
                     startActivity(i);
                 }
@@ -87,8 +86,9 @@ public class MeFragment extends BaseFragment {
         });
         return view;
     }
-    private void init(){
-        if("false".equals(ShareUtil.get(getActivity(),"login",""))){
+
+    private void init() {
+        if ("false".equals(ShareUtil.get(getActivity(), "login", "false"))) {
             user_name.setText("您还未登录...");
             account_tv.setText("0");
             ll_login_btn.setOnClickListener(new View.OnClickListener() {
@@ -98,9 +98,9 @@ public class MeFragment extends BaseFragment {
                     startActivity(i);
                 }
             });
-        }else if("true".equals(ShareUtil.get(getActivity(),"login",""))){
+        } else if ("true".equals(ShareUtil.get(getActivity(), "login", "false"))) {
             doQryMeList();
-            user_name.setText(ShareUtil.get(getActivity(),"username","")+"");
+            user_name.setText(ShareUtil.get(getActivity(), "username", "") + "");
             tv_login.setText("退出登录");
             ll_login_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -110,7 +110,7 @@ public class MeFragment extends BaseFragment {
                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加"Yes"按钮
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    ShareUtil.put(getActivity(),"login","false");
+                                    ShareUtil.put(getActivity(), "login", "false");
                                     user_name.setText("您还未登录...");
                                     account_tv.setText("0");
                                     tv_login.setText("点击登录");
@@ -144,8 +144,8 @@ public class MeFragment extends BaseFragment {
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
                 SpotMeModel model = (SpotMeModel) responseObj;
-                account_tv.setText(model.getData().getAccountFee()+"");
-                GlideUtil.LoadPic(getActivity(),model.getData().getHeadPicUrl(),head_img_tx);
+                account_tv.setText(model.getData().getAccountFee() + "");
+                GlideUtil.LoadPic(getActivity(), model.getData().getHeadPicUrl(), head_img_tx);
             }
 
             @Override
@@ -155,9 +155,10 @@ public class MeFragment extends BaseFragment {
             }
         });
     }
+
     private void doRequest(DisposeDataListener listener) {
         RequestParams params = new RequestParams();
-        params.put("loginName", (String) ShareUtil.get(getActivity(),"loginName",""));
+        params.put("loginName", (String) ShareUtil.get(getActivity(), "loginName", ""));
         RequestUtil.getRequest(Constant.URL2 + "queryUserInfo.api", params, listener, SpotMeModel.class);
         showProgressDialog();
     }

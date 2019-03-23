@@ -11,6 +11,8 @@ public class Constant {
     public static final String URL3 = "http://47.96.191.235:8899/trapp/ticket/";
     public static final String COMMENT_URL = "http://47.96.191.235:8899/trapp/comment/";
 
+    public static final String LOGINNAME = "loginName";
+
     public String login; //是否登录
     public String loginName;//登录名
     public String username;//用户名
