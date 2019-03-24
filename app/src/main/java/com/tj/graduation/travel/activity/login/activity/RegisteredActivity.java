@@ -121,7 +121,7 @@ public class RegisteredActivity extends BaseActivity  implements AdapterView.OnI
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
                 UserRegisteredModel model = (UserRegisteredModel) responseObj;
-                if (Integer.parseInt(model.getCode()+"") == 0) {
+                if (model.getCode() != 0) {
                     ToastUtil.showToastText(getBaseContext(), model.getMsg());
                 } else {
 //                    ShareUtil.put(getBaseContext(), Constant.loginName, model.getData().getLoginName());
