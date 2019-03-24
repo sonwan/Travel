@@ -23,6 +23,8 @@ import com.tj.graduation.travel.model.CommentModel;
 import com.tj.graduation.travel.model.CommentSubmitModel;
 import com.tj.graduation.travel.model.GuideDetailModel;
 import com.tj.graduation.travel.model.UserLikeModel;
+import com.tj.graduation.travel.util.ShareUtil;
+import com.tj.graduation.travel.util.StringUtils;
 import com.tj.graduation.travel.util.ToastUtil;
 import com.tj.graduation.travel.util.Utils;
 import com.tj.graduation.travel.util.http.RequestUtil;
@@ -71,7 +73,7 @@ public class SpotGuideDetailActivity extends BaseActivity implements View.OnClic
 
         RequestParams params = new RequestParams();
         params.put("guideId", guideId);
-        params.put("userId", "");
+        params.put("userId", (String) ShareUtil.get(this, Constant.user_id, ""));
         RequestUtil.getRequest(Constant.URL + "queryGuideDetail.api", params, new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
@@ -122,13 +124,14 @@ public class SpotGuideDetailActivity extends BaseActivity implements View.OnClic
         RequestParams params = new RequestParams();
         params.put("linkId", guideId);
         params.put("type", "GL");
-        params.put("userId", "");
+        params.put("userId", (String) ShareUtil.get(this, Constant.user_id, ""));
         params.put("content", content);
-        RequestUtil.getRequest(Constant.URL + "submitComment.api", params, new DisposeDataListener() {
+        RequestUtil.getRequest(Constant.COMMENT_URL + "submitComment.api", params, new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
                 ToastUtil.showToastText(SpotGuideDetailActivity.this, "评论成功");
+                doQryCommentList();
             }
 
             @Override
@@ -147,10 +150,10 @@ public class SpotGuideDetailActivity extends BaseActivity implements View.OnClic
     private void doUserLikeGuideSummit(String status) {
 
         RequestParams params = new RequestParams();
-        params.put("userId", "");
+        params.put("userId", (String) ShareUtil.get(this, Constant.user_id, ""));
         params.put("guideId", guideId);
         params.put("type", status);
-        RequestUtil.getRequest(Constant.URL, params, new DisposeDataListener() {
+        RequestUtil.getRequest(Constant.URL_user + "userLikeGuideSummit.api", params, new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
 
@@ -253,37 +256,46 @@ public class SpotGuideDetailActivity extends BaseActivity implements View.OnClic
                 break;
 
             case R.id.ll_comment:
-                final SpotCommentDialog commentDialog = new SpotCommentDialog(this);
-                commentDialog.setCanceledOnTouchOutside(false);
-                commentDialog.show();
-                Window window = commentDialog.getWindow();
-                window.setGravity(Gravity.BOTTOM);
-                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                WindowManager.LayoutParams params = window.getAttributes();
-                params.width = Utils.getScreenWidth(this);
-                window.setAttributes(params);
+                if (!StringUtils.isEmpty((String) ShareUtil.get(this, Constant.user_id, ""))) {
+                    final SpotCommentDialog commentDialog = new SpotCommentDialog(this);
+                    commentDialog.setCanceledOnTouchOutside(false);
+                    commentDialog.show();
+                    Window window = commentDialog.getWindow();
+                    window.setGravity(Gravity.BOTTOM);
+                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    WindowManager.LayoutParams params = window.getAttributes();
+                    params.width = Utils.getScreenWidth(this);
+                    window.setAttributes(params);
 
-                commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
-                    @Override
-                    public void OnSpotCommentPublish(String content) {
-//                        doSubmitComment(content);
+                    commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
+                        @Override
+                        public void OnSpotCommentPublish(String content) {
+                            doSubmitComment(content);
 //                        commentAdapter.notifyDataSetChanged();
-//                        commentDialog.dismiss();
-                    }
-                });
+                            commentDialog.dismiss();
+                        }
+                    });
+                } else {
+                    ToastUtil.showToastText(this, getResources().getString(R.string.no_login));
+                }
                 break;
 
             case R.id.ll_guide:
 
-                if ("我要收藏".equals(scTv.getText().toString())) {
-                    doUserLikeGuideSummit("follow");
-                    scTv.setText("已收藏");
-                    scImg.setImageResource(R.drawable.icon_sc);
+                if (!StringUtils.isEmpty((String) ShareUtil.get(this, Constant.user_id, ""))) {
+                    if ("我要收藏".equals(scTv.getText().toString())) {
+                        doUserLikeGuideSummit("follow");
+                        scTv.setText("已收藏");
+                        scImg.setImageResource(R.drawable.icon_sc);
+                    } else {
+                        doUserLikeGuideSummit("cancel");
+                        scTv.setText("我要收藏");
+                        scImg.setImageResource(R.drawable.icon_unsc);
+                    }
                 } else {
-                    doUserLikeGuideSummit("cancel");
-                    scTv.setText("我要收藏");
-                    scImg.setImageResource(R.drawable.icon_unsc);
+                    ToastUtil.showToastText(this, getResources().getString(R.string.no_login));
                 }
+
 
                 break;
         }

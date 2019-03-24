@@ -15,6 +15,11 @@ import java.util.Date;
  */
 public class StringUtils {
 
+    public static boolean isNotEmpty(CharSequence str) {
+        return !isEmpty(str);
+    }
+
+
     public static boolean isEmpty(CharSequence str) {
         return isEmpty(str, false);
     }
