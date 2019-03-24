@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -122,8 +121,8 @@ public class RegisteredActivity extends BaseActivity  implements AdapterView.OnI
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
                 UserRegisteredModel model = (UserRegisteredModel) responseObj;
-                if ("-1".equals(model.getCode())) {
-                    ToastUtil.showToastText(getBaseContext(), "注册失败！该用户已存在！");
+                if (Integer.parseInt(model.getCode()+"") == 0) {
+                    ToastUtil.showToastText(getBaseContext(), model.getMsg());
                 } else {
 //                    ShareUtil.put(getBaseContext(), Constant.loginName, model.getData().getLoginName());
 //                    ShareUtil.put(getBaseContext(), Constant.username, model.getData().getUserName());

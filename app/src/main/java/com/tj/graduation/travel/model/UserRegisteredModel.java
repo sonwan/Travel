@@ -1,15 +1,15 @@
 package com.tj.graduation.travel.model;
 
 public class UserRegisteredModel {
-    private String code;
+    private int code;
     private String msg;
     private Data data;
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 

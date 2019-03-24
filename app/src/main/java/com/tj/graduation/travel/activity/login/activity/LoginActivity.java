@@ -77,6 +77,7 @@ public class LoginActivity extends BaseActivity {
                     ShareUtil.put(getBaseContext(), Constant.loginName, model.getData().getLoginName());
                     ShareUtil.put(getBaseContext(), Constant.username, model.getData().getUserName());
                     ShareUtil.put(getBaseContext(), Constant.login, "true");
+                    ShareUtil.put(getBaseContext(), Constant.user_id, model.getData().getId());
                     Intent intent = new Intent(getBaseContext(), MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);

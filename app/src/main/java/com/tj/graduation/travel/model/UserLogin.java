@@ -36,6 +36,24 @@ public class UserLogin {
         private String userName;
         private String age;
         private String accountfee;
+        private String headPicUrl;
+        private String state;
+
+        public String getHeadPicUrl() {
+            return headPicUrl;
+        }
+
+        public void setHeadPicUrl(String headPicUrl) {
+            this.headPicUrl = headPicUrl;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public void setState(String state) {
+            this.state = state;
+        }
 
         public String getUserName() {
             return userName;
