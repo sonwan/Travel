@@ -3,7 +3,6 @@ package com.tj.graduation.travel.activity.me.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -42,7 +41,7 @@ public class MeFragment extends BaseFragment {
     private TextView tv_login;
     private LinearLayout ll_login_btn;
 
-    public static MeFragment newInstance(){
+    public static MeFragment newInstance() {
         MeFragment meFragment = new MeFragment();
         return meFragment;
     }
@@ -50,12 +49,12 @@ public class MeFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.me_fragment,container,false);
+        View view = inflater.inflate(R.layout.me_fragment, container, false);
         head_img_tx = view.findViewById(R.id.h_head);
         user_name = view.findViewById(R.id.user_name);
         account_tv = view.findViewById(R.id.tv_right_text);
-        ll_collection = view .findViewById(R.id.ll_root_collection);
-        ll_purchase = view .findViewById(R.id.ll_root_purchase);
+        ll_collection = view.findViewById(R.id.ll_root_collection);
+        ll_purchase = view.findViewById(R.id.ll_root_purchase);
         tv_login = view.findViewById(R.id.login_btn);
         ll_login_btn = view.findViewById(R.id.ll_login_btn);
 //        ShareUtil.put(getActivity(),"loginName","zhangsan");
@@ -87,8 +86,8 @@ public class MeFragment extends BaseFragment {
         });
         return view;
     }
-    private void init(){
-        if("false".equals(ShareUtil.get(getActivity(),Constant.login,""))){
+    private void init() {
+        if ("false".equals(ShareUtil.get(getActivity(), Constant.login, "false"))) {
             user_name.setText("您还未登录...");
             account_tv.setText("0");
             ll_login_btn.setOnClickListener(new View.OnClickListener() {
@@ -98,9 +97,9 @@ public class MeFragment extends BaseFragment {
                     startActivity(i);
                 }
             });
-        }else if("true".equals(ShareUtil.get(getActivity(),Constant.login,""))){
+        } else if ("true".equals(ShareUtil.get(getActivity(), Constant.login, "false"))) {
             doQryMeList();
-            user_name.setText(ShareUtil.get(getActivity(),Constant.username,"")+"");
+            user_name.setText(ShareUtil.get(getActivity(), "username", "") + "");
             tv_login.setText("退出登录");
             ll_login_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -144,8 +143,8 @@ public class MeFragment extends BaseFragment {
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
                 SpotMeModel model = (SpotMeModel) responseObj;
-                account_tv.setText(model.getData().getAccountFee()+"");
-                GlideUtil.LoadPic(getActivity(),model.getData().getHeadPicUrl(),head_img_tx);
+                account_tv.setText(model.getData().getAccountFee() + "");
+                GlideUtil.LoadPic(getActivity(), model.getData().getHeadPicUrl(), head_img_tx);
             }
 
             @Override
@@ -155,10 +154,16 @@ public class MeFragment extends BaseFragment {
             }
         });
     }
+
     private void doRequest(DisposeDataListener listener) {
         RequestParams params = new RequestParams();
+<<<<<<< HEAD
         params.put("loginName", (String) ShareUtil.get(getActivity(),Constant.loginName,""));
         RequestUtil.getRequest(Constant.URL_user + "queryUserInfo.api", params, listener, SpotMeModel.class);
+=======
+        params.put("loginName", (String) ShareUtil.get(getActivity(), "loginName", ""));
+        RequestUtil.getRequest(Constant.URL2 + "queryUserInfo.api", params, listener, SpotMeModel.class);
+>>>>>>> 3bc0bc7e0bfc3bf9e148a8a5da5bcc8d1849582b
         showProgressDialog();
     }
 
