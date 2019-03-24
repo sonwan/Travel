@@ -113,6 +113,7 @@ public class MeFragment extends BaseFragment {
                                     user_name.setText("您还未登录...");
                                     account_tv.setText("0");
                                     tv_login.setText("点击登录");
+                                    ShareUtil.put(getActivity(), Constant.user_id, "");
 //                                    ll_login_btn.setBackgroundColor(Color.parseColor("#FF8C00"));
                                     head_img_tx.setImageDrawable(getActivity().getDrawable(R.mipmap.tx_not));
                                     ll_login_btn.setOnClickListener(new View.OnClickListener() {
