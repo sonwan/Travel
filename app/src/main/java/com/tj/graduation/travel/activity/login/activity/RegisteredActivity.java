@@ -25,6 +25,8 @@ import com.tj.graduation.travel.util.http.request.RequestParams;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class RegisteredActivity extends BaseActivity  implements AdapterView.OnItemSelectedListener {
 
@@ -120,15 +122,24 @@ public class RegisteredActivity extends BaseActivity  implements AdapterView.OnI
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
                 UserRegisteredModel model = (UserRegisteredModel) responseObj;
-//                if (model.getCode()!=0 ) {
-                    ToastUtil.showToastText(getBaseContext(), model.getMsg());
-//                } else {
+                if ("-1".equals(model.getCode())) {
+                    ToastUtil.showToastText(getBaseContext(), "注册失败！该用户已存在！");
+                } else {
 //                    ShareUtil.put(getBaseContext(), Constant.loginName, model.getData().getLoginName());
 //                    ShareUtil.put(getBaseContext(), Constant.username, model.getData().getUserName());
 //                    ShareUtil.put(getBaseContext(), Constant.login, "true");
 //                    ToastUtil.showToastText(getBaseContext(), model.getMsg());
 //                    finish();
-//                }
+                    ToastUtil.showToastText(getBaseContext(), model.getMsg());
+                    Timer timer = new Timer();
+                      TimerTask task = new TimerTask() {
+                        @Override
+                        public void run() {
+                          finish(); //执行
+                        }
+                      };
+                    timer.schedule(task, 1000 * 3);//10秒后
+                }
             }
 
             @Override
@@ -149,6 +160,7 @@ public class RegisteredActivity extends BaseActivity  implements AdapterView.OnI
         params.put("passWord", password);
         params.put("cusQuestion", question);
         params.put("cusAnswer", answer);
+        params.put("age", "21");
         String sex = "";
         if (boy_id.isChecked()){
             sex = "男";
@@ -157,7 +169,7 @@ public class RegisteredActivity extends BaseActivity  implements AdapterView.OnI
             sex = "女";
         }
         params.put("sex", sex);
-        RequestUtil.getRequest(Constant.URL_user + "queryUserInfo.api", params, listener, UserRegisteredModel.class);
+        RequestUtil.getRequest(Constant.URL_user + "register.api", params, listener, UserRegisteredModel.class);
         showProgressDialog();
     }
 }
