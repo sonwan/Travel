@@ -157,13 +157,8 @@ public class MeFragment extends BaseFragment {
 
     private void doRequest(DisposeDataListener listener) {
         RequestParams params = new RequestParams();
-<<<<<<< HEAD
         params.put("loginName", (String) ShareUtil.get(getActivity(),Constant.loginName,""));
         RequestUtil.getRequest(Constant.URL_user + "queryUserInfo.api", params, listener, SpotMeModel.class);
-=======
-        params.put("loginName", (String) ShareUtil.get(getActivity(), "loginName", ""));
-        RequestUtil.getRequest(Constant.URL2 + "queryUserInfo.api", params, listener, SpotMeModel.class);
->>>>>>> 3bc0bc7e0bfc3bf9e148a8a5da5bcc8d1849582b
         showProgressDialog();
     }
 
