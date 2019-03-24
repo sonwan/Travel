@@ -21,8 +21,6 @@ import com.tj.graduation.travel.base.BaseActivity;
 import com.tj.graduation.travel.dialog.SpotCommentDialog;
 import com.tj.graduation.travel.model.CommentModel;
 import com.tj.graduation.travel.model.CommentSubmitModel;
-import com.tj.graduation.travel.util.ShareUtil;
-import com.tj.graduation.travel.util.StringUtils;
 import com.tj.graduation.travel.util.ToastUtil;
 import com.tj.graduation.travel.util.Utils;
 import com.tj.graduation.travel.util.http.RequestUtil;
@@ -159,15 +157,13 @@ public class SpotCommentActivity extends BaseActivity implements View.OnClickLis
         RequestParams params = new RequestParams();
         params.put("linkId", spotId);
         params.put("type", commenttype);
-        params.put("userId", (String) ShareUtil.get(this, Constant.LOGINNAME, ""));
+        params.put("userId", "");
         params.put("content", content);
-        RequestUtil.getRequest(Constant.COMMENT_URL + "submitComment.api", params, new DisposeDataListener() {
+        RequestUtil.getRequest(Constant.URL + "submitComment.api", params, new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
-                index = 1;
                 dismissProgressDialog();
                 ToastUtil.showToastText(SpotCommentActivity.this, "评论成功");
-                doQryCommentList();
             }
 
             @Override
@@ -199,28 +195,25 @@ public class SpotCommentActivity extends BaseActivity implements View.OnClickLis
         switch (view.getId()) {
 
             case R.id.tv_spot_comment_write:
-                if (!StringUtils.isEmpty((String) ShareUtil.get(this, Constant.LOGINNAME, ""))) {
-                    final SpotCommentDialog commentDialog = new SpotCommentDialog(SpotCommentActivity.this);
-                    commentDialog.setCanceledOnTouchOutside(false);
-                    commentDialog.show();
-                    Window window = commentDialog.getWindow();
-                    window.setGravity(Gravity.BOTTOM);
-                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    WindowManager.LayoutParams params = window.getAttributes();
-                    params.width = Utils.getScreenWidth(SpotCommentActivity.this);
-                    window.setAttributes(params);
 
-                    commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
-                        @Override
-                        public void OnSpotCommentPublish(String content) {
-                            doSubmitComment(content);
+                final SpotCommentDialog commentDialog = new SpotCommentDialog(SpotCommentActivity.this);
+                commentDialog.setCanceledOnTouchOutside(false);
+                commentDialog.show();
+                Window window = commentDialog.getWindow();
+                window.setGravity(Gravity.BOTTOM);
+                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                WindowManager.LayoutParams params = window.getAttributes();
+                params.width = Utils.getScreenWidth(SpotCommentActivity.this);
+                window.setAttributes(params);
+
+                commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
+                    @Override
+                    public void OnSpotCommentPublish(String content) {
+                        doSubmitComment(content);
 //                        commentAdapter.notifyDataSetChanged();
-                            commentDialog.dismiss();
-                        }
-                    });
-                } else {
-                    ToastUtil.showToastText(this, getResources().getString(R.string.no_login));
-                }
+//                        commentDialog.dismiss();
+                    }
+                });
                 break;
 
         }

@@ -31,7 +31,6 @@ import com.tj.graduation.travel.model.CommentModel;
 import com.tj.graduation.travel.model.CommentSubmitModel;
 import com.tj.graduation.travel.model.GuideModel;
 import com.tj.graduation.travel.model.SpotDetailModel;
-import com.tj.graduation.travel.util.ShareUtil;
 import com.tj.graduation.travel.util.StringUtils;
 import com.tj.graduation.travel.util.ToastUtil;
 import com.tj.graduation.travel.util.Utils;
@@ -248,7 +247,7 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
     private void dobuyTicket(int ticknum) {
 
         RequestParams params = new RequestParams();
-        params.put("buyUserId", (String) ShareUtil.get(this, Constant.LOGINNAME, ""));
+        params.put("buyUserId", "");
         params.put("buySpotId", model.getData().getDetail().getId() + "");
         params.put("buyFee", model.getData().getDetail().getTicketPrice());
         params.put("ticketNum", ticknum + "");
@@ -257,13 +256,11 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
             public void onSuccess(Object responseObj) {
 
                 dismissProgressDialog();
-                ToastUtil.showToastText(SpotDetailActivity.this, "购票成功");
 
             }
 
             @Override
             public void onFailure(Object responseObj) {
-                ToastUtil.showToastText(SpotDetailActivity.this, "购票失败");
 
                 dismissProgressDialog();
             }
@@ -283,14 +280,13 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
         RequestParams params = new RequestParams();
         params.put("linkId", model.getData().getDetail().getId() + "");
         params.put("type", "JD");
-        params.put("userId", (String) ShareUtil.get(this, Constant.LOGINNAME, ""));
+        params.put("userId", "");
         params.put("content", content);
-        RequestUtil.getRequest(Constant.COMMENT_URL + "submitComment.api", params, new DisposeDataListener() {
+        RequestUtil.getRequest(Constant.URL + "submitComment.api", params, new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
                 ToastUtil.showToastText(SpotDetailActivity.this, "评论成功");
-                doQryCommentList();
             }
 
             @Override
@@ -309,21 +305,16 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
 
             case R.id.tv_spot_buy:
 
-                if (!StringUtils.isEmpty((String) ShareUtil.get(this, Constant.LOGINNAME, ""))) {
-                    SpotBuyDialog dialog = new SpotBuyDialog(this, model.getData().getDetail().getTicketPrice());
-                    dialog.show();
-                    dialog.setOnSpotBuyFinishListener(new SpotBuyDialog.onSpotBuyFinishListener() {
-                        @Override
-                        public void onSpotBuyFinish(int ticknum) {
-                            ToastUtil.showToastText(SpotDetailActivity.this, ticknum + "");
+                SpotBuyDialog dialog = new SpotBuyDialog(this, model.getData().getDetail().getTicketPrice());
+                dialog.show();
+                dialog.setOnSpotBuyFinishListener(new SpotBuyDialog.onSpotBuyFinishListener() {
+                    @Override
+                    public void onSpotBuyFinish(int ticknum) {
+                        ToastUtil.showToastText(SpotDetailActivity.this, ticknum + "");
 //                        dobuyTicket(ticknum);
 
-                        }
-                    });
-                } else {
-                    ToastUtil.showToastText(this, getResources().getString(R.string.no_login));
-                }
-
+                    }
+                });
 
                 break;
 
@@ -333,43 +324,31 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
 
             case R.id.ll_comment:
 
-                if (!StringUtils.isEmpty((String) ShareUtil.get(this, Constant.LOGINNAME, ""))) {
-                    final SpotCommentDialog commentDialog = new SpotCommentDialog(this);
-                    commentDialog.setCanceledOnTouchOutside(false);
-                    commentDialog.show();
-                    Window window = commentDialog.getWindow();
-                    window.setGravity(Gravity.BOTTOM);
-                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    WindowManager.LayoutParams params = window.getAttributes();
-                    params.width = Utils.getScreenWidth(this);
-                    window.setAttributes(params);
+                final SpotCommentDialog commentDialog = new SpotCommentDialog(this);
+                commentDialog.setCanceledOnTouchOutside(false);
+                commentDialog.show();
+                Window window = commentDialog.getWindow();
+                window.setGravity(Gravity.BOTTOM);
+                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                WindowManager.LayoutParams params = window.getAttributes();
+                params.width = Utils.getScreenWidth(this);
+                window.setAttributes(params);
 
-                    commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
-                        @Override
-                        public void OnSpotCommentPublish(String content) {
-                            doSubmitComment(content);
-                            commentDialog.dismiss();
-                        }
-                    });
-                } else {
-                    ToastUtil.showToastText(this, getResources().getString(R.string.no_login));
-                }
-
+                commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
+                    @Override
+                    public void OnSpotCommentPublish(String content) {
+//                        doSubmitComment(content);
+//                        commentAdapter.notifyDataSetChanged();
+//                        commentDialog.dismiss();
+                    }
+                });
 
                 break;
 
             case R.id.ll_guide:
 
-                if (!StringUtils.isEmpty((String) ShareUtil.get(this, Constant.LOGINNAME, ""))) {
-                    Intent intent = new Intent(this, SpotGuideSubmitActivity.class);
-                    intent.putExtra("spotId", model.getData().getDetail().getId() + "");
-                    startActivityForResult(intent, 0);
-
-
-                } else {
-                    ToastUtil.showToastText(this, getResources().getString(R.string.no_login));
-                }
-
+//                ToastUtil.showToastText(this, "发表攻略");
+                SpotGuideSubmitActivity.startSpotGuideSubmitActivity(this);
 
                 break;
 
@@ -381,12 +360,5 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0 && resultCode == 1) {
-            doQrySpotDetail();
-        }
 
-    }
 }

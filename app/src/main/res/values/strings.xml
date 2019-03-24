@@ -1,7 +1,4 @@
 <resources>
     <string name="app_name">Travel</string>
     <string name="comment_no_data">暂无评论</string>
-    <string name="no_login">还未登录，请先登录</string>
-    <string name="no_title">标题不能为空</string>
-    <string name="no_content">内容不能为空</string>
 </resources>

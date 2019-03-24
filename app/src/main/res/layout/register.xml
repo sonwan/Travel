@@ -6,19 +6,121 @@
 
     <EditText
         android:id="@+id/register_name"
-        android:drawableLeft="@android:drawable/ic_menu_myplaces"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:inputType="textPersonName"
         android:ems="10"
-        android:hint="请输入你的用户名"/>
+        android:hint="请输入您的姓名"/>
     <EditText
-        android:drawableLeft="@android:drawable/ic_menu_myplaces"
+        android:id="@+id/register_username"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:inputType="textPersonName"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_below="@+id/register_name"
         android:ems="10"
-        android:hint="请输入你的登录名"/>
+        android:hint="请输入您的账号"/>
+    <EditText
+        android:id="@+id/register_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:inputType="textPassword"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/register_username"
+        android:ems="10"
+        android:hint="请输入您的密码"/>
+    <EditText
+        android:id="@+id/register_pwd_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:inputType="textPassword"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/register_pwd"
+        android:ems="10"
+        android:hint="请确认您的密码"/>
+    <LinearLayout
+        android:id="@+id/register_radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/register_pwd_confirm"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/aaaa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="您的性别是："
+            android:layout_marginLeft="10dp"
+            android:textSize="20sp"/>
+        <RadioGroup
+            android:id="@+id/radioGroup_sex_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/boy_id"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="男"/>
+            <RadioButton
+                android:id="@+id/girl_id"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="女"/>
+        </RadioGroup>
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/register_problem"
+        android:layout_below="@+id/register_radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvShow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="请选择您的密保问题"
+            android:textSize="20sp"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spDwon"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_below="@+id/tvShow">  
+        </Spinner>
+      
+    </RelativeLayout>
+    <EditText
+        android:id="@+id/register_answer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:inputType="textPersonName"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/register_problem"
+        android:ems="10"
+        android:hint="密保问题答案"/>
+
+    <TextView
+        android:id="@+id/register_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/register_answer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:background="#545bcb"
+        android:textColor="#ffffff"
+        android:padding="5dp"
+        android:text="提交"
+        android:textSize="20sp" />
 
 </RelativeLayout>

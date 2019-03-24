@@ -76,9 +76,9 @@ public class MeFragment extends BaseFragment {
         ll_purchase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ("false".equals(ShareUtil.get(getActivity(), "login", ""))) {
-                    ToastUtil.showToastText(getActivity(), "您还未登陆...");
-                } else {
+                if("false".equals(ShareUtil.get(getActivity(),Constant.login,""))){
+                    ToastUtil.showToastText(getActivity(),"您还未登陆...");
+                }else{
                     Intent i = new Intent(getActivity(), PurchaseRecordsActivity.class);
                     startActivity(i);
                 }
@@ -86,9 +86,8 @@ public class MeFragment extends BaseFragment {
         });
         return view;
     }
-
     private void init() {
-        if ("false".equals(ShareUtil.get(getActivity(), "login", "false"))) {
+        if ("false".equals(ShareUtil.get(getActivity(), Constant.login, "false"))) {
             user_name.setText("您还未登录...");
             account_tv.setText("0");
             ll_login_btn.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +97,7 @@ public class MeFragment extends BaseFragment {
                     startActivity(i);
                 }
             });
-        } else if ("true".equals(ShareUtil.get(getActivity(), "login", "false"))) {
+        } else if ("true".equals(ShareUtil.get(getActivity(), Constant.login, "false"))) {
             doQryMeList();
             user_name.setText(ShareUtil.get(getActivity(), "username", "") + "");
             tv_login.setText("退出登录");
@@ -110,7 +109,7 @@ public class MeFragment extends BaseFragment {
                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加"Yes"按钮
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    ShareUtil.put(getActivity(), "login", "false");
+                                    ShareUtil.put(getActivity(),Constant.login,"false");
                                     user_name.setText("您还未登录...");
                                     account_tv.setText("0");
                                     tv_login.setText("点击登录");
@@ -158,8 +157,8 @@ public class MeFragment extends BaseFragment {
 
     private void doRequest(DisposeDataListener listener) {
         RequestParams params = new RequestParams();
-        params.put("loginName", (String) ShareUtil.get(getActivity(), "loginName", ""));
-        RequestUtil.getRequest(Constant.URL2 + "queryUserInfo.api", params, listener, SpotMeModel.class);
+        params.put("loginName", (String) ShareUtil.get(getActivity(),Constant.loginName,""));
+        RequestUtil.getRequest(Constant.URL_user + "queryUserInfo.api", params, listener, SpotMeModel.class);
         showProgressDialog();
     }
 
