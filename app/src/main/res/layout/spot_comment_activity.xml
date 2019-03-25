@@ -52,7 +52,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/tv_spot_comment_write"
-        android:layout_below="@id/ll_comment_tip">
+        android:layout_below="@id/ll_comment_tip"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <com.tj.graduation.travel.util.pulltorefresh.PullToRefreshListView
             android:id="@+id/lv_spot_detail_comment"
@@ -61,8 +63,7 @@
             android:divider="@color/divider"
             android:dividerHeight="0.7dp"
             android:listSelector="@android:color/transparent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:scrollbars="none">
 
         </com.tj.graduation.travel.util.pulltorefresh.PullToRefreshListView>
 

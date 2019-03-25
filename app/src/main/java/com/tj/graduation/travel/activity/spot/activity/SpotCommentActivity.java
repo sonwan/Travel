@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -53,6 +54,7 @@ public class SpotCommentActivity extends BaseActivity implements View.OnClickLis
     private String type;
     private String spotId;
     private String commenttype;
+    private boolean isHaveComment = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +70,8 @@ public class SpotCommentActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initView() {
+        TextView backTv = findViewById(R.id.tv_custom_back);
+        backTv.setOnClickListener(this);
         LinearLayout writeLL = findViewById(R.id.tv_spot_comment_write);
         nodataTv = findViewById(R.id.tv_comment_nodata);
         writeLL.setOnClickListener(this);
@@ -104,6 +108,33 @@ public class SpotCommentActivity extends BaseActivity implements View.OnClickLis
 
         commentAdapter = new SpotCommentAdapter(this, new ArrayList<CommentModel.CommentData.CommentList>());
         commentLv.setAdapter(commentAdapter);
+        commentAdapter.setOnReplyFinishListener(new SpotCommentAdapter.onReplyFinishListener() {
+            @Override
+            public void onReplyFinish(final String linkId, String username, final String type) {
+                if (!StringUtils.isEmpty((String) ShareUtil.get(SpotCommentActivity.this, Constant.user_id, ""))) {
+                    final SpotCommentDialog commentDialog = new SpotCommentDialog(SpotCommentActivity.this);
+                    commentDialog.setTitle("回复 " + username);
+                    commentDialog.setCanceledOnTouchOutside(false);
+                    commentDialog.show();
+                    Window window = commentDialog.getWindow();
+                    window.setGravity(Gravity.BOTTOM);
+                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    WindowManager.LayoutParams params = window.getAttributes();
+                    params.width = Utils.getScreenWidth(SpotCommentActivity.this);
+                    window.setAttributes(params);
+
+                    commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
+                        @Override
+                        public void OnSpotCommentPublish(String content) {
+                            doSubmitComment(linkId, type, content);
+                            commentDialog.dismiss();
+                        }
+                    });
+                } else {
+                    ToastUtil.showToastText(SpotCommentActivity.this, getResources().getString(R.string.no_login));
+                }
+            }
+        });
 
     }
 
@@ -154,11 +185,11 @@ public class SpotCommentActivity extends BaseActivity implements View.OnClickLis
      *
      * @param content
      */
-    private void doSubmitComment(String content) {
+    private void doSubmitComment(String LinkId, String ctype, String content) {
 
         RequestParams params = new RequestParams();
-        params.put("linkId", spotId);
-        params.put("type", commenttype);
+        params.put("linkId", LinkId);
+        params.put("type", ctype);
         params.put("userId", (String) ShareUtil.get(this, Constant.user_id, ""));
         params.put("content", content);
         RequestUtil.getRequest(Constant.COMMENT_URL + "submitComment.api", params, new DisposeDataListener() {
@@ -166,6 +197,7 @@ public class SpotCommentActivity extends BaseActivity implements View.OnClickLis
             public void onSuccess(Object responseObj) {
                 index = 1;
                 type = "refresh";
+                isHaveComment = true;
                 dismissProgressDialog();
                 ToastUtil.showToastText(SpotCommentActivity.this, "评论成功");
                 doQryCommentList();
@@ -214,8 +246,7 @@ public class SpotCommentActivity extends BaseActivity implements View.OnClickLis
                     commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
                         @Override
                         public void OnSpotCommentPublish(String content) {
-                            doSubmitComment(content);
-//                        commentAdapter.notifyDataSetChanged();
+                            doSubmitComment(spotId, commenttype, content);
                             commentDialog.dismiss();
                         }
                     });
@@ -224,6 +255,29 @@ public class SpotCommentActivity extends BaseActivity implements View.OnClickLis
                 }
                 break;
 
+            case R.id.tv_custom_back:
+                if (isHaveComment) {
+                    setResult(2);
+                }
+                finish();
+                break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            if (isHaveComment) {
+                setResult(2);
+                finish();
+            } else {
+                finish();
+            }
+
+            return false;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 }

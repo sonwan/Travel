@@ -55,6 +55,7 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
     private TextView spotDescTv;
     private TextView spotPriceTv;
     private TextView spotTrafficTv;
+    private TextView tipTv;
     private TextView spotTeleTv;
     private TextView spotCommentTv;
     private TextView buyTv;
@@ -89,6 +90,8 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
         commentLl.setOnClickListener(this);
         guideLL.setOnClickListener(this);
 
+        TextView guideTv = findViewById(R.id.tv_spot_guide);
+        guideTv.setOnClickListener(this);
         spotPicVp = findViewById(R.id.vp_spot_detail);
         spotNameTv = findViewById(R.id.tv_spot_name);
         spotAddressTv = findViewById(R.id.tv_spot_address);
@@ -96,6 +99,7 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
         spotDescTv = findViewById(R.id.tv_spot_desc);
         spotPriceTv = findViewById(R.id.tv_spot_price);
         spotTrafficTv = findViewById(R.id.tv_spot_traffic);
+        tipTv = findViewById(R.id.tv_spot_tip);
         spotTeleTv = findViewById(R.id.tv_spot_tele);
         spotCommentTv = findViewById(R.id.tv_spot_detail_comment);
         spotCommentTv.setOnClickListener(this);
@@ -164,6 +168,12 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
             spotTrafficTv.setText("无");
         }
 
+        if (StringUtils.isNotEmpty(model.getData().getDetail().getTipInfo())) {
+            tipTv.setText(model.getData().getDetail().getTipInfo());
+        } else {
+            tipTv.setText("无");
+        }
+
         spotTeleTv.setText(Html.fromHtml("电话：<font color=#1196EE>" + model.getData().getDetail().getTelephone() + "</font>"));
 
         final List<GuideModel> guideModels = model.getData().getGuidelist();
@@ -216,6 +226,35 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
             nodataTv.setVisibility(View.GONE);
             SpotCommentAdapter commentAdapter = new SpotCommentAdapter(this, commentList);
             commentLv.setAdapter(commentAdapter);
+            commentAdapter.setOnReplyFinishListener(new SpotCommentAdapter.onReplyFinishListener() {
+                @Override
+                public void onReplyFinish(final String linkId, String username, final String type) {
+
+                    if (!StringUtils.isEmpty((String) ShareUtil.get(SpotDetailActivity.this, Constant.user_id, ""))) {
+                        final SpotCommentDialog commentDialog = new SpotCommentDialog(SpotDetailActivity.this);
+                        commentDialog.setTitle("回复 " + username);
+                        commentDialog.setCanceledOnTouchOutside(false);
+                        commentDialog.show();
+                        Window window = commentDialog.getWindow();
+                        window.setGravity(Gravity.BOTTOM);
+                        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        WindowManager.LayoutParams params = window.getAttributes();
+                        params.width = Utils.getScreenWidth(SpotDetailActivity.this);
+                        window.setAttributes(params);
+
+                        commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
+                            @Override
+                            public void OnSpotCommentPublish(String content) {
+                                doSubmitComment(linkId + "", type, content);
+                                commentDialog.dismiss();
+                            }
+                        });
+                    } else {
+                        ToastUtil.showToastText(SpotDetailActivity.this, getResources().getString(R.string.no_login));
+                    }
+
+                }
+            });
         } else {
             commentLL.setVisibility(View.GONE);
             nodataTv.setVisibility(View.VISIBLE);
@@ -278,11 +317,11 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
      *
      * @param content
      */
-    private void doSubmitComment(String content) {
+    private void doSubmitComment(String linkId, String type, String content) {
 
         RequestParams params = new RequestParams();
-        params.put("linkId", model.getData().getDetail().getId() + "");
-        params.put("type", "JD");
+        params.put("linkId", linkId);
+        params.put("type", type);
         params.put("userId", (String) ShareUtil.get(this, Constant.user_id, ""));
         params.put("content", content);
         RequestUtil.getRequest(Constant.COMMENT_URL + "submitComment.api", params, new DisposeDataListener() {
@@ -310,13 +349,14 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
             case R.id.tv_spot_buy:
 
                 if (!StringUtils.isEmpty((String) ShareUtil.get(this, Constant.user_id, ""))) {
-                    SpotBuyDialog dialog = new SpotBuyDialog(this, model.getData().getDetail().getTicketPrice());
+                    final SpotBuyDialog dialog = new SpotBuyDialog(this, model.getData().getDetail().getTicketPrice());
                     dialog.show();
                     dialog.setOnSpotBuyFinishListener(new SpotBuyDialog.onSpotBuyFinishListener() {
                         @Override
                         public void onSpotBuyFinish(int ticknum) {
-                            ToastUtil.showToastText(SpotDetailActivity.this, ticknum + "");
-//                        dobuyTicket(ticknum);
+//                            ToastUtil.showToastText(SpotDetailActivity.this, ticknum + "");
+                            dobuyTicket(ticknum);
+                            dialog.dismiss();
 
                         }
                     });
@@ -347,7 +387,7 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
                     commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
                         @Override
                         public void OnSpotCommentPublish(String content) {
-                            doSubmitComment(content);
+                            doSubmitComment(model.getData().getDetail().getId() + "", "JD", content);
                             commentDialog.dismiss();
                         }
                     });
@@ -375,9 +415,20 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
 
             case R.id.tv_spot_comment_lookall:
 
-                SpotCommentActivity.startSpotCommentActivity(this, model.getData().getDetail().getName(), spotid, "JD");
+                Intent intent = new Intent(this, SpotCommentActivity.class);
+                intent.putExtra("spotname", model.getData().getDetail().getName());
+                intent.putExtra("spotId", spotid);
+                intent.putExtra("type", "JD");
+                startActivityForResult(intent, 1);
                 break;
 
+            case R.id.tv_spot_guide:
+
+                if (StringUtils.isNotEmpty(model.getData().getDetail().getAddress())) {
+                    GuideWebActivity.startGuideWebActivity(this, model.getData().getDetail().getAddress());
+                }
+
+                break;
         }
     }
 
@@ -386,6 +437,8 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0 && resultCode == 1) {
             doQrySpotDetail();
+        } else if (requestCode == 1 && resultCode == 2) {
+            doQryCommentList();
         }
 
     }

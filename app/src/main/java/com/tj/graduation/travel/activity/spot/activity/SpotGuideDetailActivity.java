@@ -119,11 +119,11 @@ public class SpotGuideDetailActivity extends BaseActivity implements View.OnClic
      *
      * @param content
      */
-    private void doSubmitComment(String content) {
+    private void doSubmitComment(String content, String linkId, String type) {
 
         RequestParams params = new RequestParams();
-        params.put("linkId", guideId);
-        params.put("type", "GL");
+        params.put("linkId", linkId);
+        params.put("type", type);
         params.put("userId", (String) ShareUtil.get(this, Constant.user_id, ""));
         params.put("content", content);
         RequestUtil.getRequest(Constant.COMMENT_URL + "submitComment.api", params, new DisposeDataListener() {
@@ -180,6 +180,34 @@ public class SpotGuideDetailActivity extends BaseActivity implements View.OnClic
             nodataTv.setVisibility(View.GONE);
             SpotCommentAdapter commentAdapter = new SpotCommentAdapter(this, commentList);
             commentLv.setAdapter(commentAdapter);
+            commentAdapter.setOnReplyFinishListener(new SpotCommentAdapter.onReplyFinishListener() {
+                @Override
+                public void onReplyFinish(final String linkId, String username, final String type) {
+                    if (!StringUtils.isEmpty((String) ShareUtil.get(SpotGuideDetailActivity.this, Constant.user_id, ""))) {
+                        final SpotCommentDialog commentDialog = new SpotCommentDialog(SpotGuideDetailActivity.this);
+                        commentDialog.setTitle("回复 " + username);
+                        commentDialog.setCanceledOnTouchOutside(false);
+                        commentDialog.show();
+                        Window window = commentDialog.getWindow();
+                        window.setGravity(Gravity.BOTTOM);
+                        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        WindowManager.LayoutParams params = window.getAttributes();
+                        params.width = Utils.getScreenWidth(SpotGuideDetailActivity.this);
+                        window.setAttributes(params);
+
+                        commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
+                            @Override
+                            public void OnSpotCommentPublish(String content) {
+                                doSubmitComment(content, linkId, type);
+//                        commentAdapter.notifyDataSetChanged();
+                                commentDialog.dismiss();
+                            }
+                        });
+                    } else {
+                        ToastUtil.showToastText(SpotGuideDetailActivity.this, getResources().getString(R.string.no_login));
+                    }
+                }
+            });
         } else {
             commentLL.setVisibility(View.GONE);
             nodataTv.setVisibility(View.VISIBLE);
@@ -251,7 +279,11 @@ public class SpotGuideDetailActivity extends BaseActivity implements View.OnClic
                 break;
 
             case R.id.tv_guide_comment_lookall:
-                SpotCommentActivity.startSpotCommentActivity(this, guideDetailModel.getData().getGuideTitle(), guideDetailModel.getData().getId(), "GL");
+                Intent intent = new Intent(this, SpotCommentActivity.class);
+                intent.putExtra("spotname", guideDetailModel.getData().getGuideTitle());
+                intent.putExtra("spotId", guideDetailModel.getData().getId());
+                intent.putExtra("type", "GL");
+                startActivityForResult(intent, 1);
 
                 break;
 
@@ -270,7 +302,7 @@ public class SpotGuideDetailActivity extends BaseActivity implements View.OnClic
                     commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
                         @Override
                         public void OnSpotCommentPublish(String content) {
-                            doSubmitComment(content);
+                            doSubmitComment(content, guideId, "GL");
 //                        commentAdapter.notifyDataSetChanged();
                             commentDialog.dismiss();
                         }
@@ -298,6 +330,15 @@ public class SpotGuideDetailActivity extends BaseActivity implements View.OnClic
 
 
                 break;
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == 2) {
+            doQryCommentList();
         }
 
     }

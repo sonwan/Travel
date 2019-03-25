@@ -17,6 +17,11 @@ import com.tj.graduation.travel.R;
 public class SpotCommentDialog extends Dialog {
 
     private OnSpotCommentPublishListener listener;
+    private String title = "写评论";
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public interface OnSpotCommentPublishListener {
         void OnSpotCommentPublish(String content);
@@ -34,6 +39,8 @@ public class SpotCommentDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.spot_comment_dialog);
+        TextView titleTv = findViewById(R.id.tv_comment_dialog_title);
+        titleTv.setText(title);
         TextView cancelTv = findViewById(R.id.tv_spot_comment_dialog_cancel);
         TextView publishTv = findViewById(R.id.tv_spot_comment_dialog_publish);
         final EditText contentEt = findViewById(R.id.et_spot_comment_dialog_content);

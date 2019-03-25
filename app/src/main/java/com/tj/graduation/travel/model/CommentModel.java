@@ -78,11 +78,28 @@ public class CommentModel {
         }
 
         public static class CommentList {
+            private String id;
             private String userId;
             private String userName;
             private String comContent;
             private String comTime;
+            private List<ReplyModel> replayList;
 
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public List<ReplyModel> getReplayList() {
+                return replayList;
+            }
+
+            public void setReplayList(List<ReplyModel> replayList) {
+                this.replayList = replayList;
+            }
 
             public String getUserId() {
                 return userId;
@@ -114,6 +131,54 @@ public class CommentModel {
 
             public void setComTime(String comTime) {
                 this.comTime = comTime;
+            }
+
+            public static class ReplyModel {
+                private String id;
+                private String replayContent;
+                private String replayTime;
+                private String userId;
+                private String userName;
+
+                public String getId() {
+                    return id;
+                }
+
+                public void setId(String id) {
+                    this.id = id;
+                }
+
+                public String getReplayContent() {
+                    return replayContent;
+                }
+
+                public void setReplayContent(String replayContent) {
+                    this.replayContent = replayContent;
+                }
+
+                public String getReplayTime() {
+                    return replayTime;
+                }
+
+                public void setReplayTime(String replayTime) {
+                    this.replayTime = replayTime;
+                }
+
+                public String getUserId() {
+                    return userId;
+                }
+
+                public void setUserId(String userId) {
+                    this.userId = userId;
+                }
+
+                public String getUserName() {
+                    return userName;
+                }
+
+                public void setUserName(String userName) {
+                    this.userName = userName;
+                }
             }
         }
 

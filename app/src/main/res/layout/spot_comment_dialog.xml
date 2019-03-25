@@ -23,6 +23,7 @@
             android:textSize="@dimen/dp13" />
 
         <TextView
+            android:id="@+id/tv_comment_dialog_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
 
