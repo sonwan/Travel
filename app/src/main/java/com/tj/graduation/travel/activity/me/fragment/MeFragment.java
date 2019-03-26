@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
+import com.tj.graduation.travel.activity.login.activity.CollectionActivity;
 import com.tj.graduation.travel.activity.login.activity.LoginActivity;
 import com.tj.graduation.travel.activity.purchase.activity.PurchaseRecordsActivity;
 import com.tj.graduation.travel.base.BaseFragment;
@@ -88,7 +89,10 @@ public class MeFragment extends BaseFragment {
         head_img_tx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity())
+                if("false".equals(ShareUtil.get(getActivity(),Constant.login,""))){
+                    ToastUtil.showToastText(getActivity(),"您还未登陆...");
+                }else {
+                    AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity())
                             .setTitle("请选择头像")
                             .setPositiveButton("本地相册", new DialogInterface.OnClickListener() {//添加"Yes"按钮
                                 @Override
@@ -117,6 +121,18 @@ public class MeFragment extends BaseFragment {
                             })
                             .create();
                     alertDialog2.show();
+                }
+            }
+        });
+        ll_collection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if("false".equals(ShareUtil.get(getActivity(),Constant.login,""))){
+                    ToastUtil.showToastText(getActivity(),"您还未登陆...");
+                }else {
+                    Intent i = new Intent(getActivity(), CollectionActivity.class);
+                    startActivity(i);
+                }
             }
         });
         ll_purchase.setOnClickListener(new View.OnClickListener() {
@@ -314,6 +330,7 @@ public class MeFragment extends BaseFragment {
                 account_tv.setText(model.getData().getAccountFee() + "");
                 ToastUtil.showToastText(getActivity(), model.getMsg());
                 head_img_tx.setImageDrawable(head_drawable);
+                doQryMeList();
             }
 
             @Override
