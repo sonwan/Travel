@@ -14,5 +14,5 @@ public class Constant {
     public static final String login = "login"; //是否登录
     public static final String loginName = "loginName";//登录名
     public static final String username = "username";//用户名
-    public static final String user_id = "user_id";//用户名
+    public static final String user_id = "user_id";//用户id
 }

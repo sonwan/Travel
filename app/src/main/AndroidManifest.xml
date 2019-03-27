@@ -18,6 +18,7 @@
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".activity.login.activity.LoginActivity"></activity>
         <activity android:name=".activity.login.activity.RegisteredActivity"></activity>
+        <activity android:name=".activity.login.activity.CollectionActivity"></activity>
         <activity android:name=".activity.purchase.activity.PurchaseRecordsActivity"></activity>
 
         <activity android:name=".activity.main.MainActivity">

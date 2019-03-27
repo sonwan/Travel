@@ -1,4 +1,4 @@
-package com.tj.graduation.travel.activity.purchase.activity;
+package com.tj.graduation.travel.activity.login.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,10 +9,11 @@ import android.widget.ListView;
 
 import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
-import com.tj.graduation.travel.activity.purchase.adapter.PurchaseRecordsAdapter;
+import com.tj.graduation.travel.activity.login.adapter.CollectionAdapter;
 import com.tj.graduation.travel.activity.spot.activity.SpotDetailActivity;
+import com.tj.graduation.travel.activity.spot.activity.SpotGuideDetailActivity;
 import com.tj.graduation.travel.base.BaseActivity;
-import com.tj.graduation.travel.model.PurchaseModel;
+import com.tj.graduation.travel.model.CollectionModel;
 import com.tj.graduation.travel.util.ShareUtil;
 import com.tj.graduation.travel.util.http.RequestUtil;
 import com.tj.graduation.travel.util.http.listener.DisposeDataListener;
@@ -20,20 +21,23 @@ import com.tj.graduation.travel.util.http.request.RequestParams;
 
 import java.util.List;
 
-public class PurchaseRecordsActivity extends BaseActivity {
+/**
+ * 收藏列表
+ */
 
-    private ListView lv;
-    private PurchaseRecordsAdapter adapter;
-    private List<PurchaseModel.Data.Item> purchaseList;
+public class CollectionActivity extends BaseActivity {
+
+    private ListView listView;
+    private CollectionAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestCustomTitle();
-        setContentView(R.layout.purchase_records_list);
+        setContentView(R.layout.collection_list);
         setCustomTitle();
-        setTItle("购票清单");
-        lv = findViewById(R.id.purchase_list);
+        setTItle("我的收藏");
+        listView = findViewById(R.id.conllection_lv);
         doQryMeList();
     }
 
@@ -42,14 +46,14 @@ public class PurchaseRecordsActivity extends BaseActivity {
             @Override
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
-                PurchaseModel model = (PurchaseModel) responseObj;
-                purchaseList = model.getData().getList();
-                adapter = new PurchaseRecordsAdapter(getBaseContext(), purchaseList);
-                lv.setAdapter(adapter);
-                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                CollectionModel model = (CollectionModel) responseObj;
+                final List<CollectionModel.Model> list =model.getData();
+                adapter = new CollectionAdapter(getBaseContext(),list);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        SpotDetailActivity.startSpotDetailActivity(getBaseContext(), purchaseList.get(i).getSpotId()+ "");
+                        SpotGuideDetailActivity.startSpotGuideDetailActivity(getBaseContext(), list.get(i).getId());
                     }
                 });
             }
@@ -62,10 +66,10 @@ public class PurchaseRecordsActivity extends BaseActivity {
         });
     }
 
-    private void doRequest(DisposeDataListener listener) {
+    private void doRequest(DisposeDataListener listener){
         RequestParams params = new RequestParams();
-        params.put("buyUserId", (String) ShareUtil.get(getBaseContext(), Constant.user_id, ""));
-        RequestUtil.getRequest(Constant.URL3 + "queryUserBuyTicketList.api", params, listener, PurchaseModel.class);
+        params.put("userId", (String)ShareUtil.get(getBaseContext(),Constant.user_id,""));
+        RequestUtil.getRequest(Constant.URL + "queryLikeGuideList.api", params, listener, CollectionModel.class);
         showProgressDialog();
     }
 }

@@ -1,51 +1,41 @@
 package com.tj.graduation.travel.activity.me.fragment;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.SystemClock;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
+import android.util.Base64;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.tj.graduation.travel.BuildConfig;
 import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
 import com.tj.graduation.travel.activity.login.activity.LoginActivity;
 import com.tj.graduation.travel.activity.purchase.activity.PurchaseRecordsActivity;
 import com.tj.graduation.travel.base.BaseFragment;
-import com.tj.graduation.travel.dialog.SelectImageDialog;
 import com.tj.graduation.travel.model.SpotMeModel;
-import com.tj.graduation.travel.util.PhotoUtils;
 import com.tj.graduation.travel.util.ShareUtil;
-import com.tj.graduation.travel.util.StringUtils;
 import com.tj.graduation.travel.util.ToastUtil;
-import com.tj.graduation.travel.util.Utils;
 import com.tj.graduation.travel.util.glide.GlideUtil;
 import com.tj.graduation.travel.util.http.RequestUtil;
 import com.tj.graduation.travel.util.http.listener.DisposeDataListener;
 import com.tj.graduation.travel.util.http.request.RequestParams;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -58,15 +48,10 @@ import static android.app.Activity.RESULT_OK;
 
 public class MeFragment extends BaseFragment {
 
-    private static final int IMAGE_SELECT_CODE = 1;
-    private static final int IMAGE_CAMERA = 2;
-    private static final int IMAGE_CROP = 3;
-    private static final int PERMISION_READ = 4;
-    private static final int PERMISION_CAMERA = 5;
-    //    private Uri cameraUri;
-    private Uri imageUri;
-    private static final String IMAGE_FILE_LOCATION = "file:///" + Environment.getExternalStorageDirectory().getPath() + "/temp.jpg";
-
+    private static final int IMAGE_REQUEST_CODE = 0;
+    private static final int CAMERA_REQUEST_CODE = 1;
+    private static final int RESIZE_REQUEST_CODE = 2;
+    private static final String IMAGE_FILE_NAME = "";
 
     private ImageView head_img_tx;
     private TextView user_name;
@@ -76,6 +61,7 @@ public class MeFragment extends BaseFragment {
     private TextView tv_login;
     private LinearLayout ll_login_btn;
 
+    private Drawable head_drawable;
     private String base64 = "";
 
     public static MeFragment newInstance() {
@@ -102,61 +88,142 @@ public class MeFragment extends BaseFragment {
         head_img_tx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (!StringUtils.isEmpty((String) ShareUtil.get(getActivity(), Constant.user_id, ""))) {
-                    final SelectImageDialog selectImageDialog = new SelectImageDialog(getActivity());
-                    selectImageDialog.setCanceledOnTouchOutside(false);
-                    selectImageDialog.show();
-                    Window window = selectImageDialog.getWindow();
-                    window.setGravity(Gravity.BOTTOM);
-                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    WindowManager.LayoutParams params = window.getAttributes();
-                    params.width = Utils.getScreenWidth(getActivity());
-                    window.setAttributes(params);
-                    selectImageDialog.setOnImageSelectListener(new SelectImageDialog.onImageSelectListener() {
-                        @Override
-                        public void onImageSelect() {
-
-                            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                            photoPickerIntent.setType("image/*");
-                            startActivityForResult(photoPickerIntent, IMAGE_SELECT_CODE);
-//                            PhotoUtils.openPic(getActivity(), IMAGE_SELECT_CODE);
-                        }
-
-                        @Override
-                        public void onImageCamera() {
-                            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) !=
-                                    PackageManager.PERMISSION_GRANTED) {
-
-                                requestPermissions(new String[]{Manifest.permission
-                                        .CAMERA}, PERMISION_CAMERA);
-
-
-                            } else {
-                                takePhoto();
-                            }
-
-                        }
-                    });
-
-                } else {
-                    ToastUtil.showToastText(getActivity(), getResources().getString(R.string.no_login));
-                }
-
+                AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity())
+                            .setTitle("请选择头像")
+                            .setPositiveButton("本地相册", new DialogInterface.OnClickListener() {//添加"Yes"按钮
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    ToastUtil.showToastText(getActivity(), "本地相册");
+                                    Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                                    galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                                    galleryIntent.setType("image/*");
+                                    startActivityForResult(galleryIntent, IMAGE_REQUEST_CODE);
+                                }
+                            })
+                            .setNegativeButton("照相机", new DialogInterface.OnClickListener() {//添加取消
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    ToastUtil.showToastText(getActivity(), "照相机");
+                                    if (isSdcardExisting()) {
+                                        Intent cameraIntent = new Intent(
+                                                "android.media.action.IMAGE_CAPTURE");
+                                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getImageUri());
+                                        cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
+                                        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+                                    } else {
+                                        ToastUtil.showToastText(getActivity(), "请插入sd卡");
+                                    }
+                                }
+                            })
+                            .create();
+                    alertDialog2.show();
             }
         });
         ll_purchase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ("false".equals(ShareUtil.get(getActivity(), Constant.login, ""))) {
-                    ToastUtil.showToastText(getActivity(), "您还未登陆...");
-                } else {
+                if("false".equals(ShareUtil.get(getActivity(),Constant.login,""))){
+                    ToastUtil.showToastText(getActivity(),"您还未登陆...");
+                }else{
                     Intent i = new Intent(getActivity(), PurchaseRecordsActivity.class);
                     startActivity(i);
                 }
             }
         });
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) {
+            return;
+        } else {
+            switch (requestCode) {
+                case IMAGE_REQUEST_CODE:
+                    resizeImage(data.getData());
+                    break;
+                case CAMERA_REQUEST_CODE:
+                    if (isSdcardExisting()) {
+                        resizeImage(getImageUri());
+                    } else {
+//                        Toast.makeText(MainActivity.this, "未找到存储卡，无法存储照片！",
+//                                Toast.LENGTH_LONG).show();
+                    }
+                    break;
+
+                case RESIZE_REQUEST_CODE:
+                    if (data != null) {
+                        showResizeImage(data);
+                    }
+                    break;
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void resizeImage(Uri uri) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 150);
+        intent.putExtra("outputY", 150);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, RESIZE_REQUEST_CODE);
+    }
+
+    private void showResizeImage(Intent data) {
+        Bundle extras = data.getExtras();
+        if (extras != null) {
+            Bitmap photo = extras.getParcelable("data");
+            head_drawable = new BitmapDrawable(photo);
+            base64 = bitmapToBase64(photo);
+            doQryHeadImg();
+        }
+    }
+    public String bitmapToBase64(Bitmap bitmap) {
+        String result = null;
+        ByteArrayOutputStream baos = null;
+        try {
+            if (bitmap != null) {
+                baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
+                baos.flush();
+                baos.close();
+
+                byte[] bitmapBytes = baos.toByteArray();
+                result = Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (baos != null) {
+                    baos.flush();
+                    baos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    private Uri getImageUri() {
+        return Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
+                IMAGE_FILE_NAME));
+    }
+
+    private boolean isSdcardExisting() {
+        final String state = Environment.getExternalStorageState();
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void init() {
@@ -182,9 +249,9 @@ public class MeFragment extends BaseFragment {
                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加"Yes"按钮
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    ShareUtil.put(getActivity(), Constant.login, "false");
-                                    ShareUtil.put(getActivity(), Constant.username, "");
-                                    ShareUtil.put(getActivity(), Constant.loginName, "");
+                                    ShareUtil.put(getActivity(),Constant.login,"false");
+                                    ShareUtil.put(getActivity(),Constant.username,"");
+                                    ShareUtil.put(getActivity(),Constant.loginName,"");
                                     user_name.setText("您还未登录...");
                                     account_tv.setText("0");
                                     tv_login.setText("点击登录");
@@ -213,103 +280,6 @@ public class MeFragment extends BaseFragment {
         }
     }
 
-    /**
-     * 拍照
-     */
-    private void takePhoto() {
-        File fileUri = new File(Environment.getExternalStorageDirectory() + "/" +
-                SystemClock.currentThreadTimeMillis() + ".jpg");
-        imageUri = Uri.fromFile(fileUri);
-        //调用系统相机
-        Intent intentCamera = new Intent();
-        intentCamera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-        //将拍照结果保存至photo_file的Uri中，不保留在相册中
-//        intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".provider", fileUri)); //Uri.fromFile(tempFile)
-        startActivityForResult(intentCamera, IMAGE_CAMERA);
-
-//        PhotoUtils.takePicture(getActivity(), imageUri, IMAGE_CAMERA);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == IMAGE_SELECT_CODE && resultCode == RESULT_OK && data != null) {
-
-            Uri imageUri = data.getData();
-            cropImage(imageUri);
-//            PhotoUtils.cropImageUri(getActivity(), imageUri, null, 50, 50, 100, 100, IMAGE_CROP);
-
-        } else if (requestCode == IMAGE_CROP && resultCode == RESULT_OK && data != null) {
-
-            imageUri = data.getData();
-
-            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission
-                    .READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-                requestPermissions(new String[]{Manifest.permission
-                        .READ_EXTERNAL_STORAGE}, PERMISION_READ);
-            } else {
-
-                try {
-                    Bitmap bitmap = PhotoUtils.getBitmapFormUri(getActivity(), imageUri);
-                    head_img_tx.setImageBitmap(bitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-
-        } else if (requestCode == IMAGE_CAMERA) {
-//            imageUri = data.getData();
-//            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-//            head_img_tx.setImageBitmap(PhotoUtils.compressImage(bitmap));
-//            cropImage(imageUri);
-            cropImage(imageUri);
-
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void cropImage(Uri orgUri) {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//        }
-        intent.setDataAndType(orgUri, "image/*");
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 50);
-        intent.putExtra("aspectY", 50);
-        intent.putExtra("outputX", 320);
-        intent.putExtra("outputY", 320);
-        intent.putExtra("scale", true);
-        intent.putExtra("return-data", false);
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        intent.putExtra("noFaceDetection", true);
-        startActivityForResult(intent, IMAGE_CROP);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISION_READ) {
-
-            if (grantResults[0] == 0) {
-                try {
-                    Bitmap bitmap = PhotoUtils.getBitmapFormUri(getActivity(), imageUri);
-                    head_img_tx.setImageBitmap(bitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        } else if (requestCode == PERMISION_CAMERA) {
-            if (grantResults[0] == 0) {
-                takePhoto();
-            }
-        }
-    }
-
     private void doQryMeList() {
         doRequest(new DisposeDataListener() {
             @Override
@@ -330,7 +300,7 @@ public class MeFragment extends BaseFragment {
 
     private void doRequest(DisposeDataListener listener) {
         RequestParams params = new RequestParams();
-        params.put("loginName", (String) ShareUtil.get(getActivity(), Constant.loginName, ""));
+        params.put("loginName", (String) ShareUtil.get(getActivity(),Constant.loginName,""));
         RequestUtil.getRequest(Constant.URL_user + "queryUserInfo.api", params, listener, SpotMeModel.class);
         showProgressDialog();
     }
@@ -343,6 +313,7 @@ public class MeFragment extends BaseFragment {
                 SpotMeModel model = (SpotMeModel) responseObj;
                 account_tv.setText(model.getData().getAccountFee() + "");
                 ToastUtil.showToastText(getActivity(), model.getMsg());
+                head_img_tx.setImageDrawable(head_drawable);
             }
 
             @Override
@@ -355,7 +326,7 @@ public class MeFragment extends BaseFragment {
 
     private void doHeadRequest(DisposeDataListener listener) {
         RequestParams params = new RequestParams();
-        params.put("userId", (String) ShareUtil.get(getActivity(), Constant.loginName, ""));
+        params.put("userId", (String) ShareUtil.get(getActivity(),Constant.loginName,""));
         params.put("userHeadPic", base64);
         RequestUtil.getRequest(Constant.URL_user + "uploadHeadPic.api", params, listener, SpotMeModel.class);
         showProgressDialog();
