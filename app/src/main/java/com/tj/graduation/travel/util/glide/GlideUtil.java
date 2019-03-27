@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.StringSignature;
 import com.tj.graduation.travel.R;
 
 /**
@@ -22,9 +23,16 @@ public class GlideUtil {
 
     public static void LoadPic(Context context, String picurl, ImageView imageView) {
 
-//        Glide.with(context).load(picurl).into(imageView);
         Glide.with(context).load(picurl).error(R.drawable.show_image_loading).into(imageView);
 
     }
+
+    public static void LoadPicWithoutCache(Context context, String picurl, ImageView imageView) {
+
+        String updateTime = String.valueOf(System.currentTimeMillis());
+        Glide.with(context).load(picurl).error(R.drawable.show_image_loading).signature(new StringSignature(updateTime)).into(imageView);
+
+    }
+
 
 }

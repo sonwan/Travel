@@ -297,6 +297,7 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
 
                 dismissProgressDialog();
                 ToastUtil.showToastText(SpotDetailActivity.this, "购票成功");
+                ShareUtil.put(SpotDetailActivity.this, Constant.IS_HAVE_BUY, "TRUE");
 
             }
 

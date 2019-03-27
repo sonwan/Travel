@@ -10,7 +10,6 @@ import android.widget.ListView;
 import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
 import com.tj.graduation.travel.activity.login.adapter.CollectionAdapter;
-import com.tj.graduation.travel.activity.spot.activity.SpotDetailActivity;
 import com.tj.graduation.travel.activity.spot.activity.SpotGuideDetailActivity;
 import com.tj.graduation.travel.base.BaseActivity;
 import com.tj.graduation.travel.model.CollectionModel;
@@ -38,6 +37,12 @@ public class CollectionActivity extends BaseActivity {
         setCustomTitle();
         setTItle("我的收藏");
         listView = findViewById(R.id.conllection_lv);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         doQryMeList();
     }
 
@@ -47,8 +52,8 @@ public class CollectionActivity extends BaseActivity {
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
                 CollectionModel model = (CollectionModel) responseObj;
-                final List<CollectionModel.Model> list =model.getData();
-                adapter = new CollectionAdapter(getBaseContext(),list);
+                final List<CollectionModel.Model> list = model.getData();
+                adapter = new CollectionAdapter(getBaseContext(), list);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -66,9 +71,9 @@ public class CollectionActivity extends BaseActivity {
         });
     }
 
-    private void doRequest(DisposeDataListener listener){
+    private void doRequest(DisposeDataListener listener) {
         RequestParams params = new RequestParams();
-        params.put("userId", (String)ShareUtil.get(getBaseContext(),Constant.user_id,""));
+        params.put("userId", (String) ShareUtil.get(getBaseContext(), Constant.user_id, ""));
         RequestUtil.getRequest(Constant.URL + "queryLikeGuideList.api", params, listener, CollectionModel.class);
         showProgressDialog();
     }

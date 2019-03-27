@@ -6,11 +6,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
 import com.tj.graduation.travel.activity.Strategy.fragment.StrategyListFragment;
 import com.tj.graduation.travel.activity.me.fragment.MeFragment;
 import com.tj.graduation.travel.activity.spot.fragment.SpotListFragment;
 import com.tj.graduation.travel.base.BaseFragmentActivity;
+import com.tj.graduation.travel.util.ShareUtil;
+import com.tj.graduation.travel.util.StringUtils;
 
 /**
  * Created by wangsong on 2019/3/3.
@@ -116,6 +119,12 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
                     fragmentTransaction.add(R.id.fl_main_fragment, meFragment);
                 } else {
                     fragmentTransaction.show(meFragment);
+                    String isHaveBuy = (String) ShareUtil.get(this, Constant.IS_HAVE_BUY, "");
+                    if (StringUtils.isNotEmpty(isHaveBuy) && "TRUE".equals(isHaveBuy)) {
+                        meFragment.doQryMeList();
+                        ShareUtil.put(this, Constant.IS_HAVE_BUY, "FALSE");
+                    }
+
                 }
 
                 break;
