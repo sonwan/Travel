@@ -1,4 +1,4 @@
-package com.tj.graduation.travel.util;
+package com.tj.graduation.travel.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
