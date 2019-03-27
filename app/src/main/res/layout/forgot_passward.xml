@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/forgot_name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:hint="请输入您的账号"/>
+
+    <RelativeLayout
+        android:id="@+id/forgot_problem"
+        android:layout_below="@+id/forgot_name"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvShow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="请选择您的密保问题"
+            android:textSize="17sp"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/forgot_down"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_below="@+id/tvShow">  
+        </Spinner>
+          
+    </RelativeLayout>
+    <EditText
+        android:id="@+id/forgot_answer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:inputType="textPersonName"
+        android:layout_below="@+id/forgot_problem"
+        android:ems="10"
+        android:hint="请输入您的答案"/>
+
+    <Button
+        android:id="@+id/forgot_submit"
+        android:layout_below="@+id/forgot_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#545bcb"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:padding="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="提交"/>
+</RelativeLayout>

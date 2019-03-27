@@ -23,5 +23,16 @@ public class ToastUtil {
         toast.show();
 
     }
+    public static void showToastTextLong(Context context, String text) {
+
+        if (toast == null) {
+            toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
+
+        } else {
+            toast.setText(text);
+        }
+        toast.show();
+
+    }
 
 }

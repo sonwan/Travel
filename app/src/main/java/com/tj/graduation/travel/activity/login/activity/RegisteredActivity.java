@@ -121,30 +121,23 @@ public class RegisteredActivity extends BaseActivity  implements AdapterView.OnI
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
                 UserRegisteredModel model = (UserRegisteredModel) responseObj;
-                if (model.getCode() != 0) {
-                    ToastUtil.showToastText(getBaseContext(), model.getMsg());
-                } else {
-//                    ShareUtil.put(getBaseContext(), Constant.loginName, model.getData().getLoginName());
-//                    ShareUtil.put(getBaseContext(), Constant.username, model.getData().getUserName());
-//                    ShareUtil.put(getBaseContext(), Constant.login, "true");
-//                    ToastUtil.showToastText(getBaseContext(), model.getMsg());
-//                    finish();
-                    ToastUtil.showToastText(getBaseContext(), model.getMsg());
-                    Timer timer = new Timer();
-                      TimerTask task = new TimerTask() {
+                ToastUtil.showToastText(getBaseContext(), model.getMsg());
+                Timer timer = new Timer();
+                TimerTask task = new TimerTask() {
                         @Override
                         public void run() {
                           finish(); //执行
                         }
-                      };
-                    timer.schedule(task, 1000 * 3);//10秒后
-                }
+                };
+                timer.schedule(task, 1000 * 3);//3秒后
             }
 
             @Override
             public void onFailure(Object responseObj) {
                 dismissProgressDialog();
                 Log.e("msg", "failure");
+//                UserRegisteredModel model = (UserRegisteredModel) responseObj;
+//                ToastUtil.showToastText(getBaseContext(), model.getMsg());
             }
         });
     }

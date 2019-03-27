@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
@@ -26,6 +27,7 @@ public class LoginActivity extends BaseActivity {
     private Button login_btn_register;
     private EditText user_name;
     private EditText pwd;
+    private TextView forgot;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class LoginActivity extends BaseActivity {
         login_btn_register = findViewById(R.id.login_btn_register);
         user_name = findViewById(R.id.login_edit_account);
         pwd = findViewById(R.id.login_edit_pwd);
+        forgot = findViewById(R.id.login_forgot);
     }
 
     private void event() {
@@ -63,6 +66,13 @@ public class LoginActivity extends BaseActivity {
                 startActivity(i);
             }
         });
+        forgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getBaseContext(), ForgotPasswordActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     private void doQryMeList() {
@@ -71,23 +81,22 @@ public class LoginActivity extends BaseActivity {
             public void onSuccess(Object responseObj) {
                 dismissProgressDialog();
                 UserLogin model = (UserLogin) responseObj;
-                if (model.getCode()!=0 ) {
-                    ToastUtil.showToastText(getBaseContext(), model.getMsg());
-                } else {
-                    ShareUtil.put(getBaseContext(), Constant.loginName, model.getData().getLoginName());
-                    ShareUtil.put(getBaseContext(), Constant.username, model.getData().getUserName());
-                    ShareUtil.put(getBaseContext(), Constant.login, "true");
-                    ShareUtil.put(getBaseContext(), Constant.user_id, model.getData().getId());
-                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
+                ToastUtil.showToastText(getBaseContext(), model.getMsg());
+                ShareUtil.put(getBaseContext(), Constant.loginName, model.getData().getLoginName());
+                ShareUtil.put(getBaseContext(), Constant.username, model.getData().getUserName());
+                ShareUtil.put(getBaseContext(), Constant.login, "true");
+                ShareUtil.put(getBaseContext(), Constant.user_id, model.getData().getId());
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
 
             @Override
             public void onFailure(Object responseObj) {
                 dismissProgressDialog();
                 Log.e("msg", "failure");
+//                UserLogin model = (UserLogin) responseObj;
+//                ToastUtil.showToastText(getBaseContext(), model.getMsg());
             }
         });
     }
