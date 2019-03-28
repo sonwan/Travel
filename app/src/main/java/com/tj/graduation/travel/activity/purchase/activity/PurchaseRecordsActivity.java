@@ -46,12 +46,12 @@ public class PurchaseRecordsActivity extends BaseActivity {
                 purchaseList = model.getData().getList();
                 adapter = new PurchaseRecordsAdapter(getBaseContext(), purchaseList);
                 lv.setAdapter(adapter);
-                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        SpotDetailActivity.startSpotDetailActivity(getBaseContext(), purchaseList.get(i).getSpotId()+ "");
-                    }
-                });
+//                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                        SpotDetailActivity.startSpotDetailActivity(getBaseContext(), purchaseList.get(i).getSpotId()+ "");
+//                    }
+//                });
             }
 
             @Override
