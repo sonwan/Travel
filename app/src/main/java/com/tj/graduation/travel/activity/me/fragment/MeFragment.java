@@ -187,12 +187,15 @@ public class MeFragment extends BaseFragment {
 
         if (requestCode == IMAGE_SELECT_CODE && resultCode == RESULT_OK && data != null) {
 
-            Uri imageUri = data.getData();
-            cropImage(imageUri);
+            Uri oriUri = data.getData();
+            File desFile = new File(Environment.getExternalStorageDirectory() + "/" +
+                    SystemClock.currentThreadTimeMillis() + ".jpg");
+            imageUri = Uri.fromFile(desFile);
+            cropImage(oriUri, imageUri);
 
         } else if (requestCode == IMAGE_CROP && resultCode == RESULT_OK && data != null) {
 
-            imageUri = data.getData();
+//            imageUri = data.getData();
 
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission
                     .READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -213,13 +216,13 @@ public class MeFragment extends BaseFragment {
 
 
         } else if (requestCode == IMAGE_CAMERA) {
-            cropImage(imageUri);
+            cropImage(imageUri, imageUri);
 
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void cropImage(Uri orgUri) {
+    private void cropImage(Uri orgUri, Uri desUri) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(orgUri, "image/*");
         intent.putExtra("crop", "true");
@@ -229,6 +232,7 @@ public class MeFragment extends BaseFragment {
         intent.putExtra("outputY", 320);
         intent.putExtra("scale", true);
         intent.putExtra("return-data", false);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, desUri);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("noFaceDetection", true);
         startActivityForResult(intent, IMAGE_CROP);
