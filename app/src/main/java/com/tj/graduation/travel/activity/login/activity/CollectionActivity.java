@@ -14,7 +14,9 @@ import com.tj.graduation.travel.activity.spot.activity.SpotGuideDetailActivity;
 import com.tj.graduation.travel.base.BaseActivity;
 import com.tj.graduation.travel.model.CollectionModel;
 import com.tj.graduation.travel.util.ShareUtil;
+import com.tj.graduation.travel.util.ToastUtil;
 import com.tj.graduation.travel.util.http.RequestUtil;
+import com.tj.graduation.travel.util.http.exception.OkHttpException;
 import com.tj.graduation.travel.util.http.listener.DisposeDataListener;
 import com.tj.graduation.travel.util.http.request.RequestParams;
 
@@ -67,6 +69,8 @@ public class CollectionActivity extends BaseActivity {
             public void onFailure(Object responseObj) {
                 dismissProgressDialog();
                 Log.e("msg", "failure");
+                OkHttpException resp = (OkHttpException)responseObj;
+                ToastUtil.showToastText(getBaseContext(), resp.getEmsg().toString());
             }
         });
     }

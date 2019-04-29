@@ -17,6 +17,7 @@ import com.tj.graduation.travel.model.CommentSubmitModel;
 import com.tj.graduation.travel.util.StringUtils;
 import com.tj.graduation.travel.util.ToastUtil;
 import com.tj.graduation.travel.util.http.RequestUtil;
+import com.tj.graduation.travel.util.http.exception.OkHttpException;
 import com.tj.graduation.travel.util.http.listener.DisposeDataListener;
 import com.tj.graduation.travel.util.http.request.RequestParams;
 
@@ -109,8 +110,8 @@ public class ForgotPasswordActivity extends BaseActivity implements AdapterView.
             public void onFailure(Object responseObj) {
                 dismissProgressDialog();
                 Log.e("msg", "failure");
-//                CommentSubmitModel model = (CommentSubmitModel) responseObj;
-//                ToastUtil.showToastText(getBaseContext(), model.getMsg());
+                OkHttpException resp = (OkHttpException)responseObj;
+                ToastUtil.showToastText(getBaseContext(), resp.getEmsg().toString());
             }
         });
     }

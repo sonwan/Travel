@@ -28,7 +28,7 @@ public class CommonJsonCallback implements Callback {
     //与服务器的字段的一个对应关系
     protected final String RESULT_CODE = "code"; //有返回则对于http请求来说是成功的，但还有可能是业务逻辑上的错误
     protected final int RESULT_CODE_VALUE = 0;
-    protected final String ERROR_MSG = "emsg";
+    protected final String ERROR_MSG = "msg";
     protected final String EMPTY_MSG = "";
 
     //自定义异常类型
@@ -93,7 +93,7 @@ public class CommonJsonCallback implements Callback {
                         }
                     }
                 } else { //将服务端返回的异常回调到应用层去处理
-                    mListener.onFailure(new OkHttpException(OTHER_ERROR, result.get(RESULT_CODE)));
+                    mListener.onFailure(new OkHttpException((Integer) result.get(RESULT_CODE), result.get(ERROR_MSG)));
                 }
             }
         } catch (Exception e) {

@@ -13,11 +13,13 @@ import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
 import com.tj.graduation.travel.activity.main.MainActivity;
 import com.tj.graduation.travel.base.BaseActivity;
+import com.tj.graduation.travel.model.BuyTickModel;
 import com.tj.graduation.travel.model.UserLogin;
 import com.tj.graduation.travel.util.ShareUtil;
 import com.tj.graduation.travel.util.StringUtils;
 import com.tj.graduation.travel.util.ToastUtil;
 import com.tj.graduation.travel.util.http.RequestUtil;
+import com.tj.graduation.travel.util.http.exception.OkHttpException;
 import com.tj.graduation.travel.util.http.listener.DisposeDataListener;
 import com.tj.graduation.travel.util.http.request.RequestParams;
 
@@ -95,8 +97,8 @@ public class LoginActivity extends BaseActivity {
             public void onFailure(Object responseObj) {
                 dismissProgressDialog();
                 Log.e("msg", "failure");
-//                UserLogin model = (UserLogin) responseObj;
-//                ToastUtil.showToastText(getBaseContext(), model.getMsg());
+                OkHttpException resp = (OkHttpException)responseObj;
+                ToastUtil.showToastText(getBaseContext(), resp.getEmsg().toString());
             }
         });
     }
@@ -107,7 +109,7 @@ public class LoginActivity extends BaseActivity {
         String password = pwd.getText().toString();
         params.put("loginName", userid);
         params.put("passWord", password);
-        RequestUtil.getRequest(Constant.URL_user + "queryUserInfo.api", params, listener, UserLogin.class);
+        RequestUtil.getRequest(Constant.URL_user + "login.api", params, listener, UserLogin.class);
         showProgressDialog();
     }
 }
