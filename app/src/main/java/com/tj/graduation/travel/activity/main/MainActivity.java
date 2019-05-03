@@ -10,6 +10,7 @@ import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
 import com.tj.graduation.travel.activity.Strategy.fragment.StrategyListFragment;
 import com.tj.graduation.travel.activity.me.fragment.MeFragment;
+import com.tj.graduation.travel.activity.order.fragment.OrderListFragment;
 import com.tj.graduation.travel.activity.spot.fragment.SpotListFragment;
 import com.tj.graduation.travel.base.BaseFragmentActivity;
 import com.tj.graduation.travel.util.ShareUtil;
@@ -19,15 +20,17 @@ import com.tj.graduation.travel.util.StringUtils;
  * Created by wangsong on 2019/3/3.
  */
 
-public class MainActivity extends BaseFragmentActivity implements View.OnClickListener {
+public class MainActivity extends BaseFragmentActivity implements View.OnClickListener, MeFragment.onLoginStatusListener {
 
     private SpotListFragment spotListFragment;
     private StrategyListFragment strategyListFragment;
+    private OrderListFragment orderListFragment;
     private MeFragment meFragment;
     private FragmentTransaction fragmentTransaction;
 
     private LinearLayout spotLL;
     private LinearLayout strategyLL;
+    private LinearLayout orderLL;
     private LinearLayout meLL;
 
     @Override
@@ -45,10 +48,12 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
         spotLL = findViewById(R.id.ll_main_spot);
         spotLL.setSelected(true);
         strategyLL = findViewById(R.id.ll_main_strategy);
+        orderLL = findViewById(R.id.ll_main_order);
         meLL = findViewById(R.id.ll_main_me);
 
         spotLL.setOnClickListener(this);
         strategyLL.setOnClickListener(this);
+        orderLL.setOnClickListener(this);
         meLL.setOnClickListener(this);
 
 
@@ -70,6 +75,9 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
         if (strategyListFragment != null) {
             fragmentTransaction.hide(strategyListFragment);
         }
+        if (orderListFragment != null) {
+            fragmentTransaction.hide(orderListFragment);
+        }
         if (meFragment != null) {
             fragmentTransaction.hide(meFragment);
         }
@@ -79,6 +87,7 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
     private void setTabDefault() {
         spotLL.setSelected(false);
         strategyLL.setSelected(false);
+        orderLL.setSelected(false);
         meLL.setSelected(false);
     }
 
@@ -111,11 +120,23 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
                 }
                 break;
 
+            case R.id.ll_main_order:
+
+                orderLL.setSelected(true);
+                if (orderListFragment == null) {
+                    orderListFragment = OrderListFragment.newInstance();
+                    fragmentTransaction.add(R.id.fl_main_fragment, orderListFragment);
+                } else {
+                    fragmentTransaction.show(orderListFragment);
+                }
+
+                break;
             case R.id.ll_main_me:
 
                 meLL.setSelected(true);
                 if (meFragment == null) {
                     meFragment = MeFragment.newInstance();
+                    meFragment.setOnLoginStatusListener(this);
                     fragmentTransaction.add(R.id.fl_main_fragment, meFragment);
                 } else {
                     fragmentTransaction.show(meFragment);
@@ -132,5 +153,15 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
         }
         fragmentTransaction.commit();
 
+    }
+
+    //监听是否退出
+    @Override
+    public void onLogout() {
+
+        if (orderListFragment != null) {
+            orderListFragment.clearData();
+            orderListFragment = null;
+        }
     }
 }

@@ -27,6 +27,16 @@ public class GlideUtil {
 
     }
 
+    /**
+     * 加载资源图片
+     * @param context
+     * @param resId
+     * @param imageView
+     */
+    public static void LoadResPic(Context context, int resId, ImageView imageView) {
+        Glide.with(context).load(resId).error(R.drawable.show_image_loading).into(imageView);
+    }
+
     public static void LoadPicWithoutCache(Context context, String picurl, ImageView imageView) {
 
         String updateTime = String.valueOf(System.currentTimeMillis());

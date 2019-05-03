@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.tj.graduation.travel.R;
+import com.tj.graduation.travel.activity.emotion.util.SpanStringUtils;
 import com.tj.graduation.travel.model.CommentModel.CommentData.CommentList.ReplyModel;
 
 import java.util.List;
@@ -60,7 +61,7 @@ public class ReplyAdapter extends BaseAdapter {
         }
 
         holder.replyNameTv.setText(model.getUserName() + "：");
-        holder.replyContentTv.setText(model.getReplayContent());
+        holder.replyContentTv.setText(SpanStringUtils.getEmotionContent(context, holder.replyContentTv, model.getReplayContent()));
         return view;
     }
 

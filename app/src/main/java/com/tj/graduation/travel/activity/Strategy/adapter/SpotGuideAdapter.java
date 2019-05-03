@@ -1,4 +1,4 @@
-package com.tj.graduation.travel.activity.spot.adapter;
+package com.tj.graduation.travel.activity.Strategy.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -29,9 +29,31 @@ public class SpotGuideAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(context);
     }
 
+    public void setList(List<GuideModel> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        this.list.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addData(List<GuideModel> list) {
+        if (list == null) return;
+        this.list.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void updateData(List<GuideModel> list) {
+        if (list == null) return;
+        this.list = list;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
-        return list.size();
+        return list == null ? 0 : list.size();
     }
 
     @Override
@@ -53,6 +75,7 @@ public class SpotGuideAdapter extends BaseAdapter {
         if (view == null) {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.spot_guide_adapter, null);
+            holder.spotNameTv = view.findViewById(R.id.tv_spot_name);
             holder.guideTitleTv = view.findViewById(R.id.tv_guide_title);
             holder.guideDateTv = view.findViewById(R.id.tv_guide_date);
             view.setTag(holder);
@@ -60,6 +83,7 @@ public class SpotGuideAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
+        holder.spotNameTv.setText(model.getSpotName());
         holder.guideTitleTv.setText(model.getGuideTitle());
         holder.guideDateTv.setText(model.getPublishTime());
 
@@ -69,6 +93,7 @@ public class SpotGuideAdapter extends BaseAdapter {
 
     class ViewHolder {
 
+        TextView spotNameTv;
         TextView guideTitleTv;
         TextView guideDateTv;
     }

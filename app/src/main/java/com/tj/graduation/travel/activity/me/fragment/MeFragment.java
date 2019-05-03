@@ -75,6 +75,17 @@ public class MeFragment extends BaseFragment {
     private LinearLayout ll_login_btn;
 
     private String base64 = "";
+    private onLoginStatusListener listener;
+
+    public void setOnLoginStatusListener(onLoginStatusListener listener) {
+        this.listener = listener;
+    }
+
+    //监听登陆状态，去重制订单列表
+    public interface onLoginStatusListener {
+
+        void onLogout();
+    }
 
     public static MeFragment newInstance() {
         MeFragment meFragment = new MeFragment();
@@ -299,6 +310,7 @@ public class MeFragment extends BaseFragment {
                                             startActivity(i);
                                         }
                                     });
+                                    listener.onLogout();
                                 }
                             })
                             .setNegativeButton("取消", new DialogInterface.OnClickListener() {//添加取消

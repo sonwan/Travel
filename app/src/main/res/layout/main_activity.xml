@@ -46,7 +46,7 @@
             android:orientation="vertical"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -59,6 +59,33 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="攻略"
+                android:textColor="@drawable/main_tab_text_selector"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_main_order"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:visibility="visible">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/main_tab_order_selector" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="订单"
                 android:textColor="@drawable/main_tab_text_selector"
                 android:textSize="13sp" />
 

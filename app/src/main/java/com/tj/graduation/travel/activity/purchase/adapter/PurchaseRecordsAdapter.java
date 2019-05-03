@@ -1,7 +1,6 @@
 package com.tj.graduation.travel.activity.purchase.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +18,27 @@ public class PurchaseRecordsAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private List<PurchaseModel.Data.Item> purchaseList;
 
-    public PurchaseRecordsAdapter(Context context,List<PurchaseModel.Data.Item> purchaseList){
+    public PurchaseRecordsAdapter(Context context, List<PurchaseModel.Data.Item> purchaseList) {
         this.context = context;
         this.purchaseList = purchaseList;
         inflater = LayoutInflater.from(context);
     }
 
+    public void updateData(List<PurchaseModel.Data.Item> purchaseList) {
+        if (purchaseList == null) return;
+        this.purchaseList = purchaseList;
+        notifyDataSetChanged();
+
+    }
+
+    public void clearData(){
+        this.purchaseList.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
-        return purchaseList.size();
+        return purchaseList == null ? 0 : purchaseList.size();
     }
 
     @Override
@@ -44,7 +55,7 @@ public class PurchaseRecordsAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         PurchaseModel.Data.Item model = purchaseList.get(i);
         ViewHolder holder = null;
-        if(view == null){
+        if (view == null) {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.purchase_records_item, viewGroup, false);
             holder.item_name = view.findViewById(R.id.item_name);
@@ -52,13 +63,13 @@ public class PurchaseRecordsAdapter extends BaseAdapter {
             holder.item_price = view.findViewById(R.id.item_price);
             holder.item_time = view.findViewById(R.id.item_time);
             view.setTag(holder);
-        }else{
+        } else {
             holder = (ViewHolder) view.getTag();
         }
         holder.item_name.setText(model.getSpotName());
-        holder.item_id.setText("票号："+model.getTicketId());
-        holder.item_price.setText("价格："+model.getTicketFee());
-        holder.item_time.setText("购票时间:  "+model.getTicketBuyTime());
+        holder.item_id.setText("票号：" + model.getTicketId());
+        holder.item_price.setText("价格：" + model.getTicketFee());
+        holder.item_time.setText("购票时间:  " + model.getTicketBuyTime());
         return view;
     }
 

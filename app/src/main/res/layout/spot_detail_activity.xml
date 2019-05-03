@@ -1,87 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
-
-    <LinearLayout
-        android:id="@+id/ll_spot_detail_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:divider="@drawable/divider_1_bg"
-        android:orientation="horizontal"
-        android:showDividers="middle">
-
-
-        <LinearLayout
-            android:id="@+id/ll_comment"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/divider" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:src="@drawable/icon_comment_write" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
-                android:layout_marginTop="5dp"
-                android:text="我要评论"
-                android:textColor="@color/spot_list_name"
-                android:textSize="13sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_guide"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/divider" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:src="@drawable/icon_guide" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
-                android:layout_marginTop="5dp"
-                android:text="发表攻略"
-                android:textColor="@color/spot_list_name"
-                android:textSize="13sp" />
-
-        </LinearLayout>
-
-
-    </LinearLayout>
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <ScrollView
         android:id="@+id/sv_spot_detail"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/ll_spot_detail_bottom"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:scrollbars="none">
 
         <LinearLayout
@@ -351,13 +279,15 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
-                    android:background="@color/divider" />
+                    android:background="@color/divider"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="10dp">
+                    android:padding="10dp"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -504,5 +434,86 @@
 
     </ScrollView>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</RelativeLayout>
+        <LinearLayout
+            android:id="@+id/ll_spot_detail_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:divider="@drawable/divider_1_bg"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+
+            <LinearLayout
+                android:id="@+id/ll_comment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/icon_comment_write" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginTop="5dp"
+                    android:text="我要评论"
+                    android:textColor="@color/spot_list_name"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_guide"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/icon_guide" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginTop="5dp"
+                    android:text="发表攻略"
+                    android:textColor="@color/spot_list_name"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <include layout="@layout/spot_comment_dialog" />
+
+
+    </FrameLayout>
+
+
+</LinearLayout>

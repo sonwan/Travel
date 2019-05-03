@@ -10,7 +10,7 @@ import android.widget.ListView;
 import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
 import com.tj.graduation.travel.activity.login.adapter.CollectionAdapter;
-import com.tj.graduation.travel.activity.spot.activity.SpotGuideDetailActivity;
+import com.tj.graduation.travel.activity.Strategy.activity.SpotGuideDetailActivity;
 import com.tj.graduation.travel.base.BaseActivity;
 import com.tj.graduation.travel.model.CollectionModel;
 import com.tj.graduation.travel.util.ShareUtil;

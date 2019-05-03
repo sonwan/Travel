@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tj.graduation.travel.R;
+import com.tj.graduation.travel.activity.emotion.util.SpanStringUtils;
 import com.tj.graduation.travel.model.CommentModel;
 import com.tj.graduation.travel.view.NoScrollListView;
 
@@ -87,7 +88,7 @@ public class SpotCommentAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         holder.nameTv.setText(model.getUserName());
-        holder.contentTv.setText(model.getComContent());
+        holder.contentTv.setText(SpanStringUtils.getEmotionContent(context, holder.contentTv, model.getComContent()));
         holder.dateTv.setText(model.getComTime());
 
         List<CommentModel.CommentData.CommentList.ReplyModel> replyList = model.getReplayList();

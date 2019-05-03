@@ -40,5 +40,16 @@
             android:visibility="gone" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_custom_right"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
 
 </RelativeLayout>

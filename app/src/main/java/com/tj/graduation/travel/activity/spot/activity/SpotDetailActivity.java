@@ -2,39 +2,32 @@ package com.tj.graduation.travel.activity.spot.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.util.Log;
-import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
+import com.tj.graduation.travel.activity.emotion.view.CommentView;
 import com.tj.graduation.travel.activity.spot.adapter.SpotCommentAdapter;
 import com.tj.graduation.travel.activity.spot.adapter.SpotDetailPicAdapter;
-import com.tj.graduation.travel.activity.spot.adapter.SpotGuideAdapter;
 import com.tj.graduation.travel.base.BaseActivity;
 import com.tj.graduation.travel.dialog.SpotBuyDialog;
-import com.tj.graduation.travel.dialog.SpotCommentDialog;
 import com.tj.graduation.travel.model.BuyTickModel;
 import com.tj.graduation.travel.model.CommentModel;
 import com.tj.graduation.travel.model.CommentSubmitModel;
-import com.tj.graduation.travel.model.GuideModel;
 import com.tj.graduation.travel.model.SpotDetailModel;
 import com.tj.graduation.travel.util.ShareUtil;
 import com.tj.graduation.travel.util.StringUtils;
 import com.tj.graduation.travel.util.ToastUtil;
-import com.tj.graduation.travel.util.Utils;
 import com.tj.graduation.travel.util.http.RequestUtil;
 import com.tj.graduation.travel.util.http.listener.DisposeDataListener;
 import com.tj.graduation.travel.util.http.request.RequestParams;
@@ -47,7 +40,7 @@ import java.util.List;
  * Created by wangsong on 2019/3/5.
  */
 
-public class SpotDetailActivity extends BaseActivity implements View.OnClickListener {
+public class SpotDetailActivity extends BaseActivity implements View.OnClickListener, CommentView.onCommentFinishListener {
 
     private TextView spotNameTv;
     private TextView spotAddressTv;
@@ -70,6 +63,8 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
     private String spotid;
     private SpotDetailModel model;
 
+    private CommentView commentView;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +75,7 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
         setTItle("景点详情");
         getIntentData();
         initView();
+        initCommentView();
         doQrySpotDetail();
     }
 
@@ -118,7 +114,32 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
         guideLv.setFocusable(false);
 
         sv = findViewById(R.id.sv_spot_detail);
+        sv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && commentView.isShown()) {
 
+                    commentView.hideSoftInput();
+                    if (commentView.isShowEmotion()) {
+                        commentView.hideEmotionLayout(false);
+                    }
+
+                    commentView.setVisibility(View.GONE);
+                    commentView.clearInputContent();
+                    return true;
+
+                }
+
+                return false;
+            }
+        });
+
+    }
+
+    private void initCommentView() {
+        commentView = findViewById(R.id.commentView);
+        commentView.initCommentView();
+        commentView.bindContentView(sv);
     }
 
     private void doQrySpotDetail() {
@@ -176,21 +197,21 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
 
         spotTeleTv.setText(Html.fromHtml("电话：<font color=#1196EE>" + model.getData().getDetail().getTelephone() + "</font>"));
 
-        final List<GuideModel> guideModels = model.getData().getGuidelist();
-        if (guideModels != null && guideModels.size() > 0) {
-            guideLv.setVisibility(View.VISIBLE);
-            SpotGuideAdapter spotGuideAdapter = new SpotGuideAdapter(this, guideModels);
-            guideLv.setAdapter(spotGuideAdapter);
-            guideLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                    SpotGuideDetailActivity.startSpotGuideDetailActivity(SpotDetailActivity.this, guideModels.get(i).getId());
-                }
-            });
-        } else {
-            guideLv.setVisibility(View.GONE);
-        }
+//        final List<GuideModel> guideModels = model.getData().getGuidelist();
+//        if (guideModels != null && guideModels.size() > 0) {
+//            guideLv.setVisibility(View.VISIBLE);
+//            SpotGuideAdapter spotGuideAdapter = new SpotGuideAdapter(this, guideModels);
+//            guideLv.setAdapter(spotGuideAdapter);
+//            guideLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//
+//                    SpotGuideDetailActivity.startSpotGuideDetailActivity(SpotDetailActivity.this, guideModels.get(i).getId());
+//                }
+//            });
+//        } else {
+//            guideLv.setVisibility(View.GONE);
+//        }
 
 
         sv.fullScroll(ScrollView.FOCUS_UP);
@@ -231,22 +252,48 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
                 public void onReplyFinish(final String linkId, String username, final String type) {
 
                     if (!StringUtils.isEmpty((String) ShareUtil.get(SpotDetailActivity.this, Constant.user_id, ""))) {
-                        final SpotCommentDialog commentDialog = new SpotCommentDialog(SpotDetailActivity.this);
-                        commentDialog.setTitle("回复 " + username);
-                        commentDialog.setCanceledOnTouchOutside(false);
-                        commentDialog.show();
-                        Window window = commentDialog.getWindow();
-                        window.setGravity(Gravity.BOTTOM);
-                        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        WindowManager.LayoutParams params = window.getAttributes();
-                        params.width = Utils.getScreenWidth(SpotDetailActivity.this);
-                        window.setAttributes(params);
-
-                        commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
+//                        final SpotCommentDialog commentDialog = new SpotCommentDialog(SpotDetailActivity.this);
+//                        commentDialog.setTitle("回复 " + username);
+//                        commentDialog.setCanceledOnTouchOutside(false);
+//                        commentDialog.show();
+//                        Window window = commentDialog.getWindow();
+//                        window.setGravity(Gravity.BOTTOM);
+//                        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                        WindowManager.LayoutParams params = window.getAttributes();
+//                        params.width = Utils.getScreenWidth(SpotDetailActivity.this);
+//                        window.setAttributes(params);
+//
+//                        commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
+//                            @Override
+//                            public void OnSpotCommentPublish(String content) {
+//                                doSubmitComment(linkId + "", type, content);
+//                                commentDialog.dismiss();
+//                            }
+//                        });
+                        commentView.setVisibility(View.VISIBLE);
+                        commentView.initEmotionView();
+                        commentView.setTitle("回复 " + username);
+                        commentView.setOnCommentFinishListener(new CommentView.onCommentFinishListener() {
                             @Override
-                            public void OnSpotCommentPublish(String content) {
+                            public void onCommentFinish(String content) {
                                 doSubmitComment(linkId + "", type, content);
-                                commentDialog.dismiss();
+                                if (commentView.isShowEmotion()) {
+                                    commentView.hideEmotionLayout(false);
+                                }
+                                commentView.hideSoftInput();
+                                commentView.setVisibility(View.GONE);
+                                commentView.clearInputContent();
+                            }
+
+                            @Override
+                            public void onCommentCancel() {
+                                commentView.hideSoftInput();
+                                if (commentView.isShowEmotion()) {
+                                    commentView.hideEmotionLayout(false);
+                                }
+
+                                commentView.setVisibility(View.GONE);
+                                commentView.clearInputContent();
                             }
                         });
                     } else {
@@ -375,23 +422,27 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
             case R.id.ll_comment:
 
                 if (!StringUtils.isEmpty((String) ShareUtil.get(this, Constant.user_id, ""))) {
-                    final SpotCommentDialog commentDialog = new SpotCommentDialog(this);
-                    commentDialog.setCanceledOnTouchOutside(false);
-                    commentDialog.show();
-                    Window window = commentDialog.getWindow();
-                    window.setGravity(Gravity.BOTTOM);
-                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    WindowManager.LayoutParams params = window.getAttributes();
-                    params.width = Utils.getScreenWidth(this);
-                    window.setAttributes(params);
-
-                    commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
-                        @Override
-                        public void OnSpotCommentPublish(String content) {
-                            doSubmitComment(model.getData().getDetail().getId() + "", "JD", content);
-                            commentDialog.dismiss();
-                        }
-                    });
+//                    final SpotCommentDialog commentDialog = new SpotCommentDialog(this);
+//                    commentDialog.setCanceledOnTouchOutside(false);
+//                    commentDialog.show();
+//                    Window window = commentDialog.getWindow();
+//                    window.setGravity(Gravity.BOTTOM);
+//                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                    WindowManager.LayoutParams params = window.getAttributes();
+//                    params.width = Utils.getScreenWidth(this);
+//                    window.setAttributes(params);
+//
+//                    commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
+//                        @Override
+//                        public void OnSpotCommentPublish(String content) {
+//                            doSubmitComment(model.getData().getDetail().getId() + "", "JD", content);
+//                            commentDialog.dismiss();
+//                        }
+//                    });
+                    commentView.setVisibility(View.VISIBLE);
+                    commentView.initEmotionView();
+                    commentView.setTitle("写评论");
+                    commentView.setOnCommentFinishListener(this);
                 } else {
                     ToastUtil.showToastText(this, getResources().getString(R.string.no_login));
                 }
@@ -442,5 +493,64 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
             doQryCommentList();
         }
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        commentView.hideSoftInput();
+        if (commentView.isShowEmotion()) {
+            commentView.hideEmotionLayout(false);
+        }
+
+        commentView.setVisibility(View.GONE);
+
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (commentView.isShowEmotion()) {
+                commentView.hideEmotionLayout(false);
+                return true;
+            } else {
+                if (commentView.isShown()) {
+                    commentView.setVisibility(View.GONE);
+                    commentView.clearInputContent();
+                    return true;
+                } else {
+                    return super.onKeyDown(keyCode, event);
+                }
+            }
+
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onCommentFinish(String content) {
+
+        doSubmitComment(model.getData().getDetail().getId() + "", "JD", content);
+        if (commentView.isShowEmotion()) {
+            commentView.hideEmotionLayout(false);
+        }
+        commentView.hideSoftInput();
+        commentView.setVisibility(View.GONE);
+        commentView.clearInputContent();
+    }
+
+    @Override
+    public void onCommentCancel() {
+        commentView.hideSoftInput();
+        if (commentView.isShowEmotion()) {
+            commentView.hideEmotionLayout(false);
+        }
+
+        commentView.setVisibility(View.GONE);
+        commentView.clearInputContent();
     }
 }

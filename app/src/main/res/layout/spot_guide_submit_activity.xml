@@ -1,43 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:scrollbars="none">
 
-
-    <EditText
-        android:id="@+id/et_guide_title"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/comment_edittext_bg"
-        android:hint="标题"
-        android:padding="10dp"
-        android:textColor="@color/spot_list_name"
-        android:textSize="17sp" />
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
 
-    <EditText
-        android:id="@+id/et_guide_content"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/comment_edittext_bg"
-        android:gravity="left|top"
-        android:hint="内容"
-        android:padding="10dp"
-        android:textColor="@color/spot_list_name"
-        android:textSize="15sp" />
 
-    <Button
-        android:id="@+id/btn_guide_submit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/comment_publish_bg"
-        android:padding="10dp"
-        android:text="发表攻略"
-        android:textColor="@color/white"
-        android:textSize="17sp" />
+        <EditText
+            android:id="@+id/et_guide_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/comment_edittext_bg"
+            android:hint="标题"
+            android:padding="10dp"
+            android:textColor="@color/spot_list_name"
+            android:textSize="17sp" />
 
-</LinearLayout>
+        <EditText
+            android:id="@+id/et_guide_content"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/comment_edittext_bg"
+            android:gravity="left|top"
+            android:hint="内容"
+            android:padding="10dp"
+            android:textColor="@color/spot_list_name"
+            android:textSize="15sp" />
+
+        <com.tj.graduation.travel.view.NoScrollGridView
+            android:id="@+id/gv_guide_pic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:horizontalSpacing="5dp"
+            android:listSelector="@android:color/transparent"
+            android:numColumns="4"
+            android:verticalSpacing="5dp"
+            android:visibility="gone">
+
+
+        </com.tj.graduation.travel.view.NoScrollGridView>
+
+        <Button
+            android:id="@+id/btn_guide_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/comment_publish_bg"
+            android:padding="10dp"
+            android:text="发表攻略"
+            android:textColor="@color/white"
+            android:textSize="17sp" />
+    </LinearLayout>
+</ScrollView>

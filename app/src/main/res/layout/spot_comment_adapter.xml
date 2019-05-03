@@ -29,6 +29,7 @@
         android:layout_below="@id/tv_spot_comment_name"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@id/img_spot_comment_pic"
+        android:gravity="center_vertical"
         android:text="内容"
         android:textColor="@color/spot_list_name"
         android:textSize="@dimen/detail_content" />

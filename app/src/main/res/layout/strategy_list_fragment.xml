@@ -1,13 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="25sp"
+        android:layout_height="50dp"
+        android:background="@color/title_layout"
         android:gravity="center"
-        android:text="攻略列表界面"/>
+        android:text="旅游攻略"
+        android:textColor="@color/white"
+        android:textSize="17sp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <com.tj.graduation.travel.util.pulltorefresh.PullToRefreshListView
+            android:id="@+id/lv_gl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/divider"
+            android:dividerHeight="0.7dp"
+            android:listSelector="@android:color/transparent"
+            android:scrollbars="none">
+
+        </com.tj.graduation.travel.util.pulltorefresh.PullToRefreshListView>
+
+        <TextView
+            android:id="@+id/tv_gl_nodata"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:gravity="center"
+            android:text="@string/comment_no_data"
+            android:textColor="@color/comment_date"
+            android:textSize="20sp"
+            android:visibility="gone" />
+    </FrameLayout>
 </LinearLayout>

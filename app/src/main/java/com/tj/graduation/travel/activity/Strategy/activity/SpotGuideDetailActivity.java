@@ -1,24 +1,24 @@
-package com.tj.graduation.travel.activity.spot.activity;
+package com.tj.graduation.travel.activity.Strategy.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
+import com.tj.graduation.travel.activity.emotion.view.CommentView;
+import com.tj.graduation.travel.activity.spot.activity.SpotCommentActivity;
+import com.tj.graduation.travel.activity.spot.activity.SpotDetailActivity;
 import com.tj.graduation.travel.activity.spot.adapter.SpotCommentAdapter;
 import com.tj.graduation.travel.base.BaseActivity;
-import com.tj.graduation.travel.dialog.SpotCommentDialog;
 import com.tj.graduation.travel.model.CommentModel;
 import com.tj.graduation.travel.model.CommentSubmitModel;
 import com.tj.graduation.travel.model.GuideDetailModel;
@@ -26,7 +26,6 @@ import com.tj.graduation.travel.model.UserLikeModel;
 import com.tj.graduation.travel.util.ShareUtil;
 import com.tj.graduation.travel.util.StringUtils;
 import com.tj.graduation.travel.util.ToastUtil;
-import com.tj.graduation.travel.util.Utils;
 import com.tj.graduation.travel.util.http.RequestUtil;
 import com.tj.graduation.travel.util.http.listener.DisposeDataListener;
 import com.tj.graduation.travel.util.http.request.RequestParams;
@@ -39,7 +38,7 @@ import java.util.List;
  * Created by wangsong on 2019/3/14.
  */
 
-public class SpotGuideDetailActivity extends BaseActivity implements View.OnClickListener {
+public class SpotGuideDetailActivity extends BaseActivity implements View.OnClickListener, CommentView.onCommentFinishListener {
 
     private String guideId;
     private TextView spotNameTv;
@@ -55,6 +54,8 @@ public class SpotGuideDetailActivity extends BaseActivity implements View.OnClic
     private TextView nodataTv;
     private CommentModel model;
     private GuideDetailModel guideDetailModel;
+    private ScrollView sv;
+    private CommentView commentView;
 
 
     @Override
@@ -184,25 +185,53 @@ public class SpotGuideDetailActivity extends BaseActivity implements View.OnClic
                 @Override
                 public void onReplyFinish(final String linkId, String username, final String type) {
                     if (!StringUtils.isEmpty((String) ShareUtil.get(SpotGuideDetailActivity.this, Constant.user_id, ""))) {
-                        final SpotCommentDialog commentDialog = new SpotCommentDialog(SpotGuideDetailActivity.this);
-                        commentDialog.setTitle("回复 " + username);
-                        commentDialog.setCanceledOnTouchOutside(false);
-                        commentDialog.show();
-                        Window window = commentDialog.getWindow();
-                        window.setGravity(Gravity.BOTTOM);
-                        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        WindowManager.LayoutParams params = window.getAttributes();
-                        params.width = Utils.getScreenWidth(SpotGuideDetailActivity.this);
-                        window.setAttributes(params);
+//                        final SpotCommentDialog commentDialog = new SpotCommentDialog(SpotGuideDetailActivity.this);
+//                        commentDialog.setTitle("回复 " + username);
+//                        commentDialog.setCanceledOnTouchOutside(false);
+//                        commentDialog.show();
+//                        Window window = commentDialog.getWindow();
+//                        window.setGravity(Gravity.BOTTOM);
+//                        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                        WindowManager.LayoutParams params = window.getAttributes();
+//                        params.width = Utils.getScreenWidth(SpotGuideDetailActivity.this);
+//                        window.setAttributes(params);
+//
+//                        commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
+//                            @Override
+//                            public void OnSpotCommentPublish(String content) {
+//                                doSubmitComment(content, linkId, type);
+////                        commentAdapter.notifyDataSetChanged();
+//                                commentDialog.dismiss();
+//                            }
+//                        });
 
-                        commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
+                        commentView.setVisibility(View.VISIBLE);
+                        commentView.initEmotionView();
+                        commentView.setTitle("回复 " + username);
+                        commentView.setOnCommentFinishListener(new CommentView.onCommentFinishListener() {
                             @Override
-                            public void OnSpotCommentPublish(String content) {
+                            public void onCommentFinish(String content) {
                                 doSubmitComment(content, linkId, type);
-//                        commentAdapter.notifyDataSetChanged();
-                                commentDialog.dismiss();
+                                if (commentView.isShowEmotion()) {
+                                    commentView.hideEmotionLayout(false);
+                                }
+                                commentView.hideSoftInput();
+                                commentView.setVisibility(View.GONE);
+                                commentView.clearInputContent();
+                            }
+
+                            @Override
+                            public void onCommentCancel() {
+                                commentView.hideSoftInput();
+                                if (commentView.isShowEmotion()) {
+                                    commentView.hideEmotionLayout(false);
+                                }
+
+                                commentView.setVisibility(View.GONE);
+                                commentView.clearInputContent();
                             }
                         });
+
                     } else {
                         ToastUtil.showToastText(SpotGuideDetailActivity.this, getResources().getString(R.string.no_login));
                     }
@@ -236,6 +265,34 @@ public class SpotGuideDetailActivity extends BaseActivity implements View.OnClic
 
     private void initView() {
 
+        TextView rightTv = findViewById(R.id.tv_custom_right);
+        rightTv.setVisibility(View.VISIBLE);
+        rightTv.setText("景点 >");
+        rightTv.setOnClickListener(this);
+        sv = findViewById(R.id.sv_guide_detail);
+
+        sv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && commentView.isShown()) {
+
+                    commentView.hideSoftInput();
+                    if (commentView.isShowEmotion()) {
+                        commentView.hideEmotionLayout(false);
+                    }
+
+                    commentView.setVisibility(View.GONE);
+                    commentView.clearInputContent();
+                    return true;
+
+                }
+
+                return false;
+            }
+        });
+        commentView = findViewById(R.id.commentView);
+        commentView.initCommentView();
+        commentView.bindContentView(sv);
         LinearLayout commentLl = findViewById(R.id.ll_comment);
         LinearLayout guideLL = findViewById(R.id.ll_guide);
         commentLl.setOnClickListener(this);
@@ -289,24 +346,28 @@ public class SpotGuideDetailActivity extends BaseActivity implements View.OnClic
 
             case R.id.ll_comment:
                 if (!StringUtils.isEmpty((String) ShareUtil.get(this, Constant.user_id, ""))) {
-                    final SpotCommentDialog commentDialog = new SpotCommentDialog(this);
-                    commentDialog.setCanceledOnTouchOutside(false);
-                    commentDialog.show();
-                    Window window = commentDialog.getWindow();
-                    window.setGravity(Gravity.BOTTOM);
-                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    WindowManager.LayoutParams params = window.getAttributes();
-                    params.width = Utils.getScreenWidth(this);
-                    window.setAttributes(params);
-
-                    commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
-                        @Override
-                        public void OnSpotCommentPublish(String content) {
-                            doSubmitComment(content, guideId, "GL");
-//                        commentAdapter.notifyDataSetChanged();
-                            commentDialog.dismiss();
-                        }
-                    });
+//                    final SpotCommentDialog commentDialog = new SpotCommentDialog(this);
+//                    commentDialog.setCanceledOnTouchOutside(false);
+//                    commentDialog.show();
+//                    Window window = commentDialog.getWindow();
+//                    window.setGravity(Gravity.BOTTOM);
+//                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                    WindowManager.LayoutParams params = window.getAttributes();
+//                    params.width = Utils.getScreenWidth(this);
+//                    window.setAttributes(params);
+//
+//                    commentDialog.setOnSpotCommentPublishListener(new SpotCommentDialog.OnSpotCommentPublishListener() {
+//                        @Override
+//                        public void OnSpotCommentPublish(String content) {
+//                            doSubmitComment(content, guideId, "GL");
+////                        commentAdapter.notifyDataSetChanged();
+//                            commentDialog.dismiss();
+//                        }
+//                    });
+                    commentView.setVisibility(View.VISIBLE);
+                    commentView.initEmotionView();
+                    commentView.setTitle("写评论");
+                    commentView.setOnCommentFinishListener(this);
                 } else {
                     ToastUtil.showToastText(this, getResources().getString(R.string.no_login));
                 }
@@ -330,8 +391,72 @@ public class SpotGuideDetailActivity extends BaseActivity implements View.OnClic
 
 
                 break;
+
+            case R.id.tv_custom_right:
+                SpotDetailActivity.startSpotDetailActivity(this, guideDetailModel.getData().getLinkId());
+
+                break;
         }
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        commentView.hideSoftInput();
+        if (commentView.isShowEmotion()) {
+            commentView.hideEmotionLayout(false);
+        }
+
+        commentView.setVisibility(View.GONE);
+
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (commentView.isShowEmotion()) {
+                commentView.hideEmotionLayout(false);
+                return true;
+            } else {
+                if (commentView.isShown()) {
+                    commentView.setVisibility(View.GONE);
+                    commentView.clearInputContent();
+                    return true;
+                } else {
+                    return super.onKeyDown(keyCode, event);
+                }
+            }
+
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onCommentFinish(String content) {
+
+        doSubmitComment(content, guideId, "GL");
+        if (commentView.isShowEmotion()) {
+            commentView.hideEmotionLayout(false);
+        }
+        commentView.hideSoftInput();
+        commentView.setVisibility(View.GONE);
+        commentView.clearInputContent();
+    }
+
+    @Override
+    public void onCommentCancel() {
+        commentView.hideSoftInput();
+        if (commentView.isShowEmotion()) {
+            commentView.hideEmotionLayout(false);
+        }
+
+        commentView.setVisibility(View.GONE);
+        commentView.clearInputContent();
     }
 
     @Override
