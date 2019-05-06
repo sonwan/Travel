@@ -74,6 +74,7 @@ public class SpotGuideSubmitActivity extends BaseActivity implements View.OnClic
         RequestUtil.getRequest(Constant.URL + "userGuideSubmit.api", params, new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
+//                ShareUtil.put(SpotGuideSubmitActivity.this, Constant.IS_PUBLISH_GL, "true");
                 dismissProgressDialog();
                 ToastUtil.showToastText(SpotGuideSubmitActivity.this, "提交成功");
                 setResult(1);

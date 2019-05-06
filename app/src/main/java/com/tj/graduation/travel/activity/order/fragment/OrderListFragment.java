@@ -78,7 +78,7 @@ public class OrderListFragment extends BaseFragment {
     }
 
 
-    private void doQryMeList() {
+    public void doQryMeList() {
         doRequest(new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {

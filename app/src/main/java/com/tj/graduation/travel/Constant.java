@@ -16,4 +16,5 @@ public class Constant {
     public static final String username = "username";//用户名
     public static final String user_id = "user_id";//用户id
     public static final String IS_HAVE_BUY = "is_have_buy";//是否购买门票
+    public static final String IS_PUBLISH_GL = "is_publish_gl";//是否发表了攻略
 }

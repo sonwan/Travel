@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.tj.graduation.travel.Constant;
 import com.tj.graduation.travel.R;
-import com.tj.graduation.travel.activity.Strategy.adapter.SpotGuideAdapter;
 import com.tj.graduation.travel.activity.Strategy.activity.SpotGuideDetailActivity;
+import com.tj.graduation.travel.activity.Strategy.adapter.SpotGuideAdapter;
 import com.tj.graduation.travel.base.BaseFragment;
 import com.tj.graduation.travel.model.GuideListModel;
 import com.tj.graduation.travel.model.GuideModel;
@@ -48,6 +48,10 @@ public class StrategyListFragment extends BaseFragment {
         return strategyListFragment;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,7 +65,7 @@ public class StrategyListFragment extends BaseFragment {
         doGuidelistQuery();
     }
 
-    private void doGuidelistQuery() {
+    public void doGuidelistQuery() {
         RequestParams params = new RequestParams();
         params.put("curpagenum", index + "");
         params.put("pagecount", requestcount + "");
@@ -81,7 +85,7 @@ public class StrategyListFragment extends BaseFragment {
                 glLv.onRefreshComplete();
             }
         }, GuideListModel.class);
-        showProgressDialog();
+//        showProgressDialog();
     }
 
 

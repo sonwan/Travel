@@ -117,6 +117,12 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
 
                 } else {
                     fragmentTransaction.show(strategyListFragment);
+//                    String isPublishGl = (String) ShareUtil.get(this, Constant.IS_PUBLISH_GL, "");
+//                    if (StringUtils.isNotEmpty(isPublishGl) && "true".equals(isPublishGl)) {
+                    strategyListFragment.setType("refresh");
+                    strategyListFragment.doGuidelistQuery();
+//                        ShareUtil.put(this, Constant.IS_PUBLISH_GL, "");
+//                    }
                 }
                 break;
 
@@ -128,6 +134,11 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
                     fragmentTransaction.add(R.id.fl_main_fragment, orderListFragment);
                 } else {
                     fragmentTransaction.show(orderListFragment);
+                    String isHaveBuy = (String) ShareUtil.get(this, Constant.IS_HAVE_BUY, "");
+                    if (StringUtils.isNotEmpty(isHaveBuy) && "TRUE".equals(isHaveBuy)) {
+                        orderListFragment.doQryMeList();
+                        ShareUtil.put(this, Constant.IS_HAVE_BUY, "FALSE");
+                    }
                 }
 
                 break;
@@ -140,12 +151,6 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
                     fragmentTransaction.add(R.id.fl_main_fragment, meFragment);
                 } else {
                     fragmentTransaction.show(meFragment);
-                    String isHaveBuy = (String) ShareUtil.get(this, Constant.IS_HAVE_BUY, "");
-                    if (StringUtils.isNotEmpty(isHaveBuy) && "TRUE".equals(isHaveBuy)) {
-                        meFragment.doQryMeList();
-                        ShareUtil.put(this, Constant.IS_HAVE_BUY, "FALSE");
-                    }
-
                 }
 
                 break;

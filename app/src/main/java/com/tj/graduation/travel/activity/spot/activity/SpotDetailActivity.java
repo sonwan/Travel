@@ -488,7 +488,7 @@ public class SpotDetailActivity extends BaseActivity implements View.OnClickList
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0 && resultCode == 1) {
-            doQrySpotDetail();
+//            doQrySpotDetail();
         } else if (requestCode == 1 && resultCode == 2) {
             doQryCommentList();
         }
